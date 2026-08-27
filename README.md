@@ -48,3 +48,4 @@ Authentication, dashboard, project/client management, billing, AI — this is
 intentionally infrastructure-only. See the project roadmap for what's next.
 
 &copy; 2026 Almalyani
+
