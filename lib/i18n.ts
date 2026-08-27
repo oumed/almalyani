@@ -23,6 +23,7 @@ type Dictionary = {
   underConstruction: string;
   body: string;
   copyright: string;
+  teamLogin: string;
 };
 
 export const dictionaries: Record<Locale, Dictionary> = {
@@ -37,6 +38,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
     underConstruction: "Website Under Construction",
     body: "We're currently building something new for architects across Morocco.",
     copyright: "© 2026 Almalyani",
+    teamLogin: "Team Login",
   },
   fr: {
     metaTitle: "Almalyani — L'avenir de l'architecture marocaine commence ici",
@@ -49,6 +51,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
     underConstruction: "Site en construction",
     body: "Nous construisons actuellement quelque chose de nouveau pour les architectes à travers le Maroc.",
     copyright: "© 2026 Almalyani",
+    teamLogin: "Connexion équipe",
   },
   ar: {
     metaTitle: "ألمالياني — مستقبل الهندسة المعمارية المغربية يبدأ هنا",
@@ -61,5 +64,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
     underConstruction: "الموقع قيد الإنشاء",
     body: "نحن نعمل حاليًا على بناء شيء جديد للمهندسين المعماريين في جميع أنحاء المغرب.",
     copyright: "© 2026 Almalyani",
+    teamLogin: "دخول الفريق",
   },
 };

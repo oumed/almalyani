@@ -64,9 +64,17 @@ export default async function Home({
         </div>
       </div>
 
-      <p className="relative mt-20 text-xs text-muted" dir="ltr">
-        {dict.copyright}
-      </p>
+      <div className="relative mt-20 flex flex-col items-center gap-2">
+        <p className="text-xs text-muted" dir="ltr">
+          {dict.copyright}
+        </p>
+        <Link
+          href={`/${locale}/private-login`}
+          className="text-xs text-muted underline underline-offset-4 hover:text-foreground"
+        >
+          {dict.teamLogin}
+        </Link>
+      </div>
     </main>
   );
 }
