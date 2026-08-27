@@ -32,7 +32,7 @@ export async function proxy(request: NextRequest) {
   const locale = pathname.split("/")[1];
   const rest = pathname.slice(`/${locale}`.length);
 
-  if (rest === "/private") {
+  if (rest === "/private" || rest.startsWith("/private/")) {
     const token = request.cookies.get(PRIVATE_COOKIE_NAME)?.value;
     const valid = await isValidAccessToken(token, process.env.SESSION_SECRET);
     if (!valid) {
