@@ -3,23 +3,32 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { computeAccessToken, PRIVATE_COOKIE_NAME } from "@/lib/private-auth";
+import { defaultLocale, dictionaries, isLocale, type Locale } from "@/lib/i18n";
 
 export type LoginState = { error?: string };
+
+function localeFrom(formData: FormData): Locale {
+  const raw = formData.get("locale");
+  return typeof raw === "string" && isLocale(raw) ? raw : defaultLocale;
+}
 
 export async function authenticate(
   _prevState: LoginState,
   formData: FormData
 ): Promise<LoginState> {
+  const locale = localeFrom(formData);
+  const dict = dictionaries[locale];
+
   const sitePassword = process.env.SITE_PASSWORD;
   const sessionSecret = process.env.SESSION_SECRET;
 
   if (!sitePassword || !sessionSecret) {
-    return { error: "The private area isn't configured yet." };
+    return { error: dict.errorNotConfigured };
   }
 
   const password = formData.get("password");
   if (typeof password !== "string" || password !== sitePassword) {
-    return { error: "Incorrect password." };
+    return { error: dict.errorIncorrect };
   }
 
   const token = await computeAccessToken(sessionSecret);
@@ -32,11 +41,11 @@ export async function authenticate(
     maxAge: 60 * 60 * 24 * 30, // 30 days
   });
 
-  redirect("/private");
+  redirect(`/${locale}/private`);
 }
 
-export async function logout(): Promise<void> {
+export async function logout(locale: Locale): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.delete(PRIVATE_COOKIE_NAME);
-  redirect("/private-login");
+  redirect(`/${locale}/private-login`);
 }
