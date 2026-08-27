@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Almalyani
 
-## Getting Started
+The future of Moroccan architecture starts here. A modern platform designed
+to simplify and improve the daily work of Moroccan architects.
 
-First, run the development server:
+This phase ships infrastructure only: a Coming Soon page, deployed to a free
+`*.vercel.app` domain, with a Neon Postgres database wired up (unused for now)
+for the next phase.
+
+## Stack
+
+- [Next.js](https://nextjs.org) (App Router, TypeScript, Tailwind CSS)
+- [Vercel](https://vercel.com) — hosting, CI/CD, preview deployments, HTTPS
+- [Neon](https://neon.tech) — serverless Postgres (free tier)
+- [Drizzle ORM](https://orm.drizzle.team) + drizzle-kit — schema & migrations
+
+## Local development
 
 ```bash
+npm install
+cp .env.example .env.local   # fill in DATABASE_URL from the Neon console
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Database
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Schema lives in `db/schema.ts`. After changing it:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run db:generate   # generate a migration
+npm run db:migrate     # apply it
+```
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+Pushes to `main` deploy to production automatically via Vercel's GitHub
+integration. Every other branch/PR gets its own preview deployment.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Environment | Branch    | DATABASE_URL points at        |
+| ----------- | --------- | ------------------------------ |
+| Development | local     | your own `.env.local`          |
+| Preview     | any PR    | Neon preview branch (per PR)   |
+| Production  | `main`    | Neon production branch         |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Not yet built
 
-## Deploy on Vercel
+Authentication, dashboard, project/client management, billing, AI — this is
+intentionally infrastructure-only. See the project roadmap for what's next.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+&copy; 2026 Almalyani
