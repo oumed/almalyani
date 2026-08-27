@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { defaultLocale, isLocale, locales } from "@/lib/i18n";
+import { isValidAccessToken, PRIVATE_COOKIE_NAME } from "@/lib/private-auth";
 
 function detectLocale(request: NextRequest): string {
   const acceptLanguage = request.headers.get("accept-language");
@@ -15,17 +16,33 @@ function detectLocale(request: NextRequest): string {
   return defaultLocale;
 }
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const hasLocale = locales.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
   );
-  if (hasLocale) return NextResponse.next();
 
-  const locale = detectLocale(request);
-  const url = request.nextUrl.clone();
-  url.pathname = `/${locale}${pathname}`;
-  return NextResponse.redirect(url);
+  if (!hasLocale) {
+    const locale = detectLocale(request);
+    const url = request.nextUrl.clone();
+    url.pathname = `/${locale}${pathname}`;
+    return NextResponse.redirect(url);
+  }
+
+  const locale = pathname.split("/")[1];
+  const rest = pathname.slice(`/${locale}`.length);
+
+  if (rest === "/private") {
+    const token = request.cookies.get(PRIVATE_COOKIE_NAME)?.value;
+    const valid = await isValidAccessToken(token, process.env.SESSION_SECRET);
+    if (!valid) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/${locale}/private-login`;
+      return NextResponse.redirect(url);
+    }
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
