@@ -1,0 +1,175 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f4f4f4', 'tertiaryColor': '#fff'}}}%%
+erDiagram
+    %% ==========================================
+    %% PILLAR 1: IDENTITY (BLUE)
+    %% ==========================================
+    users ||--o{ project_team : "assigned_to"
+    users ||--o{ bids : "submits"
+    users ||--o{ rfis : "raises"
+    users ||--o{ construction_logs : "writes"
+    users ||--o{ documents : "uploads"
+
+    %% ==========================================
+    %% PILLAR 2: PROJECT CORE & WBS (GREEN)
+    %% ==========================================
+    users ||--o{ projects : "owns"
+    projects ||--o{ project_phases : "contains"
+    project_phases ||--o{ project_tasks : "contains"
+    projects ||--o{ project_team : "has_team"
+
+    %% ==========================================
+    %% PILLAR 3: MOROCCAN LEGAL & PERMITS (ORANGE)
+    %% ==========================================
+    projects ||--o| building_permits : "1-to-1 (Rokhas)"
+    projects ||--o| occupancy_permits : "1-to-1 (Habiter)"
+    building_permits ||--o{ payments : "pays_taxes"
+
+    %% ==========================================
+    %% PILLAR 4: FINANCE & BIDS (GOLD)
+    %% ==========================================
+    projects ||--o{ bids : "receives"
+    bids ||--o| contracts : "wins"
+    contracts ||--o{ payments : "has_payments"
+
+    %% ==========================================
+    %% PILLAR 5: CDE, BIM & QUALITY (PURPLE)
+    %% ==========================================
+    projects ||--o{ documents : "has_versions"
+    documents ||--o{ document_revisions : "history"
+    projects ||--o{ rfis : "has_clarifications"
+    projects ||--o{ submittals : "has_approvals"
+    projects ||--o{ bim_models : "has_3d_data"
+    bim_models ||--o{ bim_elements : "contains_objects"
+
+    %% ==========================================
+    %% TABLE DEFINITIONS WITH KEY FIELDS
+    %% ==========================================
+    users {
+        uuid id PK
+        string email "Unique Login"
+        string user_type "client|pro|admin"
+        string status "active|suspended"
+        jsonb attributes "CIN, Name, Phone, Address"
+        string cin "GENERATED (Indexed)"
+        string phone "GENERATED (Indexed)"
+        string full_name "GENERATED (Trigram)"
+    }
+
+    projects {
+        uuid id PK
+        uuid client_id FK "Owner"
+        string status "draft|rokhas|construction|closed"
+        geometry geo_location "PostGIS Point"
+        jsonb hot_attributes "Rokhas, Taxes, Rejections"
+        jsonb cold_attributes "Budget, Cadastre, BIM"
+        string cadastral_generated "GENERATED (Indexed)"
+        decimal budget_min_generated "GENERATED (Indexed)"
+        tsvector search_vector "French + Arabic FTS"
+    }
+
+    building_permits {
+        uuid id PK
+        uuid project_id FK "Unique"
+        string status "submitted|rejected|delivered"
+        jsonb attributes "Rokhas_ref, Submission_History[], Rejection_Reasons, Tax_Booleans"
+    }
+
+    occupancy_permits {
+        uuid id PK
+        uuid project_id FK "Unique"
+        string status "inspecting|issued|rejected"
+        jsonb attributes "Inspection_Date, Notes, Certificate_URL"
+    }
+
+    documents {
+        uuid id PK
+        uuid project_id FK
+        string cde_status "WIP|Shared|Published|Archived"
+        jsonb attributes "Title, File_URL, Doc_Type, Approved_Flag"
+    }
+
+    document_revisions {
+        uuid id PK
+        uuid document_id FK
+        jsonb attributes "Version, Change_Desc, File_URL"
+    }
+
+    construction_logs {
+        uuid id PK
+        uuid project_id FK
+        date log_date
+        jsonb attributes "Progress%, Photos[], Weather, Issues"
+    }
+
+    rfis {
+        uuid id PK
+        uuid project_id FK
+        string status "open|answered|closed"
+        jsonb attributes "Question, Response, Priority, Cost_Impact"
+    }
+
+    bids {
+        uuid id PK
+        uuid project_id FK
+        uuid professional_id FK
+        string status "submitted|accepted|rejected"
+        jsonb attributes "Amount, Proposal, Duration"
+    }
+
+    contracts {
+        uuid id PK
+        uuid bid_id FK
+        uuid project_id FK
+        string status "active|completed|terminated"
+        jsonb attributes "Total_Amount, Terms, Signed_Date"
+    }
+
+    payments {
+        uuid id PK
+        uuid contract_id FK "Nullable"
+        uuid building_permit_id FK "Nullable (for taxes)"
+        string status "pending|completed|refunded"
+        jsonb attributes "Amount, Payment_Type, Receipt_URL"
+    }
+
+    bim_models {
+        uuid id PK
+        uuid project_id FK
+        jsonb attributes "IFC_Version, Software, Volume, Area"
+    }
+
+    bim_elements {
+        uuid id PK
+        uuid bim_model_id FK
+        jsonb attributes "Global_ID, Type, Material, Properties"
+    }
+
+    project_team {
+        uuid id PK
+        uuid project_id FK
+        uuid user_id FK
+        string role "architect|bet|topographer"
+        jsonb attributes "Rate, Assigned_Date"
+    }
+
+    project_phases {
+        uuid id PK
+        uuid project_id FK
+        string status "active|completed"
+        jsonb attributes "Name, Progress%"
+    }
+
+    project_tasks {
+        uuid id PK
+        uuid phase_id FK
+        uuid assigned_to FK
+        string status "todo|in_progress|done"
+        jsonb attributes "Title, Due_Date, Deliverables"
+    }
+
+    submittals {
+        uuid id PK
+        uuid project_id FK
+        string status "submitted|approved|rejected"
+        jsonb attributes "Title, Response_Deadline, Revisions[]"
+    }
