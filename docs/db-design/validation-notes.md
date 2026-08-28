@@ -22,22 +22,27 @@ columns, and exercised the RLS policies with a non-superuser role.
    point partitioning needs to be designed together with the FK graph, not
    bolted on after.
 
-2. **`jsonb_matches_schema(...)` is not a real PostgreSQL function.**
-   DeepSeek's comment calls it "PostgreSQL 17 native," but vanilla Postgres
-   has no built-in JSON Schema validation. This exists only via the
-   `pg_jsonschema` extension (used by Supabase) — not available on Neon by
-   default, and not confirmed installable there.
-   → Recommendation: either drop this constraint and validate shape at the
-   application layer (Drizzle + zod, simplest), or swap in Postgres-native
-   `CHECK` constraints on the specific fields that matter (e.g. regex on
-   `attributes->>'phone'`).
+2. **`jsonb_matches_schema(...)` isn't vanilla Postgres — it needs
+   `pg_jsonschema`, which the script never installs.** ~~Originally flagged
+   as "not a real function" — corrected after checking directly against our
+   actual Neon project:~~ **Neon does offer `pg_jsonschema`**
+   (`pg_available_extensions` lists it, `default_version 0.3.4`), and it
+   works exactly as expected once created — tested directly against our
+   Neon dev branch: `CREATE EXTENSION pg_jsonschema; SELECT
+   jsonb_matches_schema(...)` returned `true`/`false` correctly. The script's
+   actual bug is just a missing line: add `CREATE EXTENSION IF NOT EXISTS
+   "pg_jsonschema";` alongside the others. Not a blocker — just incomplete.
 
-3. **`pg_cron` is unlikely to be available on Neon's free tier** (it's a
-   superuser-installed extension; Neon supports it on some plans but this
-   needs confirming before relying on it — don't assume). The materialized
-   view refresh it's meant to schedule can instead run from a Vercel Cron
-   Job (already $0 on Vercel's free tier) hitting an API route that runs
-   `REFRESH MATERIALIZED VIEW`.
+3. **`pg_cron` is listed as available on Neon, but won't fire reliably on
+   the free tier — confirmed against our actual project config.** Our
+   Neon project's `subscription_type` is `free_v3`, and free-tier computes
+   auto-suspend after inactivity regardless of `suspend_timeout_seconds`
+   (only paid plans can disable autosuspend). `pg_cron`'s scheduler needs an
+   always-on background worker; if the compute is suspended when a job is
+   due, that tick is simply skipped, not queued.
+   → Recommendation stands: run the materialized-view refresh from a Vercel
+   Cron Job (free) hitting an API route instead — that connection itself
+   wakes the compute, so it works reliably even after autosuspend.
 
 4. **RLS policies need matching `GRANT`s on every table referenced inside
    them, not just the base table.** `professional_project_policy` on
@@ -55,6 +60,40 @@ columns, and exercised the RLS policies with a non-superuser role.
 - RLS actually restricts rows by `client_id` once permissions are granted
   (tested: owner sees their project, a different `app.current_user_id` sees
   zero rows).
+
+## Compatibility with our actual stack (Neon + Drizzle) — the real "does it work for us" question
+
+Almalyani's `db/index.ts` uses `drizzle-orm/neon-http` — the stateless HTTP
+driver (one query per request, no persistent session). This matters a lot
+for this schema's RLS design, which depends on `current_setting
+('app.current_user_id', true)` being set on the same connection/transaction
+as the query that reads it:
+
+- **Drizzle's own `db.transaction(...)` throws immediately on this driver** —
+  confirmed by reading `node_modules/drizzle-orm/neon-http/session.js`:
+  `"No transactions support in neon-http driver"`. So you cannot do `SET
+  LOCAL app.current_user_id = ...` followed by a Drizzle query and expect
+  the setting to carry over — every `db.query...` call is its own isolated
+  transaction.
+- **The underlying `@neondatabase/serverless` HTTP client's own
+  `sql.transaction([...])` batching *does* work for this**, confirmed by
+  testing directly against our Neon dev branch: a `SET LOCAL` statement and
+  a dependent `SELECT current_setting(...)` batched together returned the
+  value set moments earlier, in the same call.
+
+Net effect: **RLS-scoped queries (`projects`, `documents`, `rfis`) can't go
+through Drizzle's normal query builder as designed** — they'd need either:
+  a. raw parameterized SQL via `sql.transaction([...])` for just those
+     tables (keeps `neon-http`, loses Drizzle's type-safe builder for that
+     slice), or
+  b. switching those code paths (or the whole app) to
+     `drizzle-orm/neon-serverless` (`Pool` over WebSockets), which supports
+     real sessions and `db.transaction()` natively.
+
+This isn't a reason to reject the RLS design — it's a real, workable
+pattern (Supabase's `auth.uid()` convention does the same thing) — but it's
+a concrete decision to make explicitly when this schema is actually built,
+not something to discover mid-implementation.
 
 ## Design-level fit against Almalyani's actual scope
 
