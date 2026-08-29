@@ -1,11 +1,13 @@
 import { eq } from "drizzle-orm";
 import { notFound, redirect } from "next/navigation";
 import { db } from "@/db";
-import { projects, users } from "@/db/schema";
+import { projects, projectPhases, projectTeamMembers, users } from "@/db/schema";
 import { dictionaries, isLocale } from "@/lib/i18n";
 import { getCurrentUser } from "@/lib/session";
 import { ProjectForm } from "../../ProjectForm";
 import { updateProject, closeProject } from "../../actions";
+import { TeamSection, type TeamMemberRow } from "../TeamSection";
+import { PhasesSection, type PhaseRow } from "../PhasesSection";
 
 export default async function EditProjectPage({
   params,
@@ -29,6 +31,26 @@ export default async function EditProjectPage({
     .from(users)
     .where(eq(users.userType, "client"));
 
+  const allUsers = await db.select({ id: users.id, fullName: users.fullName, email: users.email }).from(users);
+
+  const teamRows = await db
+    .select({
+      id: projectTeamMembers.id,
+      role: projectTeamMembers.role,
+      isActive: projectTeamMembers.isActive,
+      userName: users.fullName,
+      userEmail: users.email,
+    })
+    .from(projectTeamMembers)
+    .leftJoin(users, eq(users.id, projectTeamMembers.userId))
+    .where(eq(projectTeamMembers.projectId, target.id));
+
+  const phaseRows = await db
+    .select()
+    .from(projectPhases)
+    .where(eq(projectPhases.projectId, target.id))
+    .orderBy(projectPhases.displayOrder);
+
   const cold = target.coldAttributes as {
     title?: string;
     description?: string;
@@ -38,9 +60,28 @@ export default async function EditProjectPage({
     budget?: { min?: number; max?: number };
   };
 
+  const teamMembers: TeamMemberRow[] = teamRows.map((r) => ({
+    id: r.id,
+    role: r.role,
+    isActive: r.isActive,
+    userName: r.userName,
+    userEmail: r.userEmail ?? "",
+  }));
+
+  const phases: PhaseRow[] = phaseRows.map((p) => {
+    const attrs = p.attributes as { name?: string; progress_pct?: number };
+    return {
+      id: p.id,
+      displayOrder: p.displayOrder,
+      status: p.status,
+      name: attrs.name ?? "",
+      progressPct: attrs.progress_pct ?? 0,
+    };
+  });
+
   return (
     <main className="relative flex flex-1 flex-col items-center px-6 py-16 sm:py-24">
-      <div className="flex w-full max-w-lg flex-col gap-8">
+      <div className="flex w-full max-w-2xl flex-col gap-8">
         <h1 className="text-sm font-semibold uppercase tracking-[0.2em] text-foreground">
           {cold.title || dict.projectsAdmin.title}
         </h1>
@@ -74,6 +115,16 @@ export default async function EditProjectPage({
             </button>
           </form>
         )}
+
+        <TeamSection
+          locale={locale}
+          dict={dict}
+          projectId={target.id}
+          members={teamMembers}
+          users={allUsers.map((u) => ({ id: u.id, label: u.fullName || u.email }))}
+        />
+
+        <PhasesSection locale={locale} dict={dict} projectId={target.id} phases={phases} />
       </div>
     </main>
   );

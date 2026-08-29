@@ -169,6 +169,48 @@ type Dictionary = {
     errorGeneric: string;
     errorForbidden: string;
   };
+  projectTeam: {
+    title: string;
+    tableName: string;
+    tableRole: string;
+    tableActive: string;
+    active: string;
+    inactive: string;
+    remove: string;
+    reactivate: string;
+    addMemberTitle: string;
+    memberLabel: string;
+    roleLabel: string;
+    roles: {
+      architect: string;
+      bet_engineer: string;
+      rebar_controller: string;
+      topographer: string;
+      main_contractor: string;
+    };
+    addButton: string;
+    addingButton: string;
+    empty: string;
+    errorGeneric: string;
+    errorDuplicate: string;
+  };
+  projectPhases: {
+    title: string;
+    tableOrder: string;
+    tableName: string;
+    tableStatus: string;
+    tableProgress: string;
+    addPhaseTitle: string;
+    nameLabel: string;
+    orderLabel: string;
+    statusLabel: string;
+    statuses: { not_started: string; active: string; completed: string };
+    addButton: string;
+    addingButton: string;
+    updateButton: string;
+    empty: string;
+    errorGeneric: string;
+  };
 };
 
 export const dictionaries: Record<Locale, Dictionary> = {
@@ -388,6 +430,48 @@ export const dictionaries: Record<Locale, Dictionary> = {
       errorGeneric: "Something went wrong. Please check the fields and try again.",
       errorForbidden: "You don't have access to this page.",
     },
+    projectTeam: {
+      title: "Team Members",
+      tableName: "Name",
+      tableRole: "Role",
+      tableActive: "Status",
+      active: "Active",
+      inactive: "Inactive",
+      remove: "Remove",
+      reactivate: "Reactivate",
+      addMemberTitle: "Add Team Member",
+      memberLabel: "User",
+      roleLabel: "Role",
+      roles: {
+        architect: "Architect",
+        bet_engineer: "Engineering Firm",
+        rebar_controller: "Rebar Controller",
+        topographer: "Topographer",
+        main_contractor: "Main Contractor",
+      },
+      addButton: "Add",
+      addingButton: "Adding…",
+      empty: "No team members yet.",
+      errorGeneric: "Something went wrong. Please try again.",
+      errorDuplicate: "This user already has that role on this project.",
+    },
+    projectPhases: {
+      title: "Phases",
+      tableOrder: "#",
+      tableName: "Name",
+      tableStatus: "Status",
+      tableProgress: "Progress",
+      addPhaseTitle: "Add Phase",
+      nameLabel: "Name",
+      orderLabel: "Order",
+      statusLabel: "Status",
+      statuses: { not_started: "Not started", active: "Active", completed: "Completed" },
+      addButton: "Add",
+      addingButton: "Adding…",
+      updateButton: "Update",
+      empty: "No phases yet.",
+      errorGeneric: "Something went wrong. Please try again.",
+    },
   },
   fr: {
     metaTitle: "Abdelkrim Meliani — Architecte D.P.L.G",
@@ -605,6 +689,48 @@ export const dictionaries: Record<Locale, Dictionary> = {
       errorGeneric: "Une erreur est survenue. Vérifiez les champs et réessayez.",
       errorForbidden: "Vous n'avez pas accès à cette page.",
     },
+    projectTeam: {
+      title: "Équipe du projet",
+      tableName: "Nom",
+      tableRole: "Rôle",
+      tableActive: "Statut",
+      active: "Actif",
+      inactive: "Inactif",
+      remove: "Retirer",
+      reactivate: "Réactiver",
+      addMemberTitle: "Ajouter un membre",
+      memberLabel: "Utilisateur",
+      roleLabel: "Rôle",
+      roles: {
+        architect: "Architecte",
+        bet_engineer: "Bureau d'études",
+        rebar_controller: "Contrôleur ferraillage",
+        topographer: "Topographe",
+        main_contractor: "Entreprise principale",
+      },
+      addButton: "Ajouter",
+      addingButton: "Ajout…",
+      empty: "Aucun membre pour le moment.",
+      errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+      errorDuplicate: "Cet utilisateur a déjà ce rôle sur ce projet.",
+    },
+    projectPhases: {
+      title: "Phases",
+      tableOrder: "#",
+      tableName: "Nom",
+      tableStatus: "Statut",
+      tableProgress: "Progression",
+      addPhaseTitle: "Ajouter une phase",
+      nameLabel: "Nom",
+      orderLabel: "Ordre",
+      statusLabel: "Statut",
+      statuses: { not_started: "Non démarrée", active: "En cours", completed: "Terminée" },
+      addButton: "Ajouter",
+      addingButton: "Ajout…",
+      updateButton: "Mettre à jour",
+      empty: "Aucune phase pour le moment.",
+      errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+    },
   },
   ar: {
     metaTitle: "عبد الكريم مليان — مهندس معماري",
@@ -819,6 +945,48 @@ export const dictionaries: Record<Locale, Dictionary> = {
       closingButton: "جارٍ الإغلاق…",
       errorGeneric: "حدث خطأ ما. تحقق من الحقول وحاول مرة أخرى.",
       errorForbidden: "ليس لديك صلاحية الوصول إلى هذه الصفحة.",
+    },
+    projectTeam: {
+      title: "فريق المشروع",
+      tableName: "الاسم",
+      tableRole: "الدور",
+      tableActive: "الحالة",
+      active: "نشط",
+      inactive: "غير نشط",
+      remove: "إزالة",
+      reactivate: "إعادة التفعيل",
+      addMemberTitle: "إضافة عضو",
+      memberLabel: "المستخدم",
+      roleLabel: "الدور",
+      roles: {
+        architect: "مهندس معماري",
+        bet_engineer: "مكتب دراسات",
+        rebar_controller: "مراقب حديد التسليح",
+        topographer: "مساح طوبوغرافي",
+        main_contractor: "المقاول الرئيسي",
+      },
+      addButton: "إضافة",
+      addingButton: "جارٍ الإضافة…",
+      empty: "لا يوجد أعضاء بعد.",
+      errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
+      errorDuplicate: "هذا المستخدم لديه بالفعل هذا الدور في هذا المشروع.",
+    },
+    projectPhases: {
+      title: "المراحل",
+      tableOrder: "#",
+      tableName: "الاسم",
+      tableStatus: "الحالة",
+      tableProgress: "التقدم",
+      addPhaseTitle: "إضافة مرحلة",
+      nameLabel: "الاسم",
+      orderLabel: "الترتيب",
+      statusLabel: "الحالة",
+      statuses: { not_started: "لم تبدأ", active: "جارية", completed: "مكتملة" },
+      addButton: "إضافة",
+      addingButton: "جارٍ الإضافة…",
+      updateButton: "تحديث",
+      empty: "لا توجد مراحل بعد.",
+      errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
     },
   },
 };
