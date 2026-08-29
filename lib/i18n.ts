@@ -211,6 +211,76 @@ type Dictionary = {
     empty: string;
     errorGeneric: string;
   };
+  projectTasksSection: {
+    title: string;
+    tablePhase: string;
+    tableTitle: string;
+    tableAssignee: string;
+    tableStatus: string;
+    phaseLabel: string;
+    titleLabel: string;
+    assigneeLabel: string;
+    unassigned: string;
+    statusLabel: string;
+    statuses: { todo: string; in_progress: string; review: string; done: string };
+    addButton: string;
+    addingButton: string;
+    updateButton: string;
+    empty: string;
+    errorGeneric: string;
+  };
+  projectDocumentsSection: {
+    title: string;
+    tableTitle: string;
+    tableType: string;
+    tableStatus: string;
+    titleLabel: string;
+    fileUrlLabel: string;
+    typeLabel: string;
+    statusLabel: string;
+    statuses: { WIP: string; Shared: string; Published: string; Archived: string };
+    addButton: string;
+    addingButton: string;
+    updateButton: string;
+    empty: string;
+    errorGeneric: string;
+  };
+  projectClarifications: {
+    title: string;
+    tableQuestion: string;
+    tablePriority: string;
+    tableStatus: string;
+    questionLabel: string;
+    priorityLabel: string;
+    priorities: { low: string; medium: string; high: string };
+    statusLabel: string;
+    statuses: { open: string; answered: string; closed: string };
+    addButton: string;
+    addingButton: string;
+    updateButton: string;
+    empty: string;
+    errorGeneric: string;
+  };
+  projectApprovals: {
+    title: string;
+    tableTitle: string;
+    tableStatus: string;
+    titleLabel: string;
+    descriptionLabel: string;
+    statusLabel: string;
+    statuses: {
+      submitted: string;
+      under_review: string;
+      approved: string;
+      rejected: string;
+      revised: string;
+    };
+    addButton: string;
+    addingButton: string;
+    updateButton: string;
+    empty: string;
+    errorGeneric: string;
+  };
 };
 
 export const dictionaries: Record<Locale, Dictionary> = {
@@ -472,6 +542,76 @@ export const dictionaries: Record<Locale, Dictionary> = {
       empty: "No phases yet.",
       errorGeneric: "Something went wrong. Please try again.",
     },
+    projectTasksSection: {
+      title: "Tasks",
+      tablePhase: "Phase",
+      tableTitle: "Task",
+      tableAssignee: "Assignee",
+      tableStatus: "Status",
+      phaseLabel: "Phase",
+      titleLabel: "Task",
+      assigneeLabel: "Assignee",
+      unassigned: "Unassigned",
+      statusLabel: "Status",
+      statuses: { todo: "To do", in_progress: "In progress", review: "Review", done: "Done" },
+      addButton: "Add",
+      addingButton: "Adding…",
+      updateButton: "Update",
+      empty: "No tasks yet.",
+      errorGeneric: "Something went wrong. Please try again.",
+    },
+    projectDocumentsSection: {
+      title: "Documents",
+      tableTitle: "Title",
+      tableType: "Type",
+      tableStatus: "Status",
+      titleLabel: "Title",
+      fileUrlLabel: "File URL",
+      typeLabel: "Type",
+      statusLabel: "Status",
+      statuses: { WIP: "Work in progress", Shared: "Shared", Published: "Published", Archived: "Archived" },
+      addButton: "Add",
+      addingButton: "Adding…",
+      updateButton: "Update",
+      empty: "No documents yet.",
+      errorGeneric: "Something went wrong. Please try again.",
+    },
+    projectClarifications: {
+      title: "Clarification Requests",
+      tableQuestion: "Question",
+      tablePriority: "Priority",
+      tableStatus: "Status",
+      questionLabel: "Question",
+      priorityLabel: "Priority",
+      priorities: { low: "Low", medium: "Medium", high: "High" },
+      statusLabel: "Status",
+      statuses: { open: "Open", answered: "Answered", closed: "Closed" },
+      addButton: "Add",
+      addingButton: "Adding…",
+      updateButton: "Update",
+      empty: "No clarification requests yet.",
+      errorGeneric: "Something went wrong. Please try again.",
+    },
+    projectApprovals: {
+      title: "Approval Submissions",
+      tableTitle: "Title",
+      tableStatus: "Status",
+      titleLabel: "Title",
+      descriptionLabel: "Description",
+      statusLabel: "Status",
+      statuses: {
+        submitted: "Submitted",
+        under_review: "Under review",
+        approved: "Approved",
+        rejected: "Rejected",
+        revised: "Revised",
+      },
+      addButton: "Add",
+      addingButton: "Adding…",
+      updateButton: "Update",
+      empty: "No approval submissions yet.",
+      errorGeneric: "Something went wrong. Please try again.",
+    },
   },
   fr: {
     metaTitle: "Abdelkrim Meliani — Architecte D.P.L.G",
@@ -731,6 +871,76 @@ export const dictionaries: Record<Locale, Dictionary> = {
       empty: "Aucune phase pour le moment.",
       errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
     },
+    projectTasksSection: {
+      title: "Tâches",
+      tablePhase: "Phase",
+      tableTitle: "Tâche",
+      tableAssignee: "Assigné à",
+      tableStatus: "Statut",
+      phaseLabel: "Phase",
+      titleLabel: "Tâche",
+      assigneeLabel: "Assigné à",
+      unassigned: "Non assignée",
+      statusLabel: "Statut",
+      statuses: { todo: "À faire", in_progress: "En cours", review: "Révision", done: "Terminée" },
+      addButton: "Ajouter",
+      addingButton: "Ajout…",
+      updateButton: "Mettre à jour",
+      empty: "Aucune tâche pour le moment.",
+      errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+    },
+    projectDocumentsSection: {
+      title: "Documents",
+      tableTitle: "Titre",
+      tableType: "Type",
+      tableStatus: "Statut",
+      titleLabel: "Titre",
+      fileUrlLabel: "URL du fichier",
+      typeLabel: "Type",
+      statusLabel: "Statut",
+      statuses: { WIP: "En cours", Shared: "Partagé", Published: "Publié", Archived: "Archivé" },
+      addButton: "Ajouter",
+      addingButton: "Ajout…",
+      updateButton: "Mettre à jour",
+      empty: "Aucun document pour le moment.",
+      errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+    },
+    projectClarifications: {
+      title: "Demandes de clarification",
+      tableQuestion: "Question",
+      tablePriority: "Priorité",
+      tableStatus: "Statut",
+      questionLabel: "Question",
+      priorityLabel: "Priorité",
+      priorities: { low: "Faible", medium: "Moyenne", high: "Élevée" },
+      statusLabel: "Statut",
+      statuses: { open: "Ouverte", answered: "Répondue", closed: "Fermée" },
+      addButton: "Ajouter",
+      addingButton: "Ajout…",
+      updateButton: "Mettre à jour",
+      empty: "Aucune demande pour le moment.",
+      errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+    },
+    projectApprovals: {
+      title: "Soumissions d'approbation",
+      tableTitle: "Titre",
+      tableStatus: "Statut",
+      titleLabel: "Titre",
+      descriptionLabel: "Description",
+      statusLabel: "Statut",
+      statuses: {
+        submitted: "Soumise",
+        under_review: "En révision",
+        approved: "Approuvée",
+        rejected: "Rejetée",
+        revised: "Révisée",
+      },
+      addButton: "Ajouter",
+      addingButton: "Ajout…",
+      updateButton: "Mettre à jour",
+      empty: "Aucune soumission pour le moment.",
+      errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+    },
   },
   ar: {
     metaTitle: "عبد الكريم مليان — مهندس معماري",
@@ -986,6 +1196,76 @@ export const dictionaries: Record<Locale, Dictionary> = {
       addingButton: "جارٍ الإضافة…",
       updateButton: "تحديث",
       empty: "لا توجد مراحل بعد.",
+      errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
+    },
+    projectTasksSection: {
+      title: "المهام",
+      tablePhase: "المرحلة",
+      tableTitle: "المهمة",
+      tableAssignee: "المكلَّف",
+      tableStatus: "الحالة",
+      phaseLabel: "المرحلة",
+      titleLabel: "المهمة",
+      assigneeLabel: "المكلَّف",
+      unassigned: "غير مُسندة",
+      statusLabel: "الحالة",
+      statuses: { todo: "قيد الانتظار", in_progress: "قيد التنفيذ", review: "مراجعة", done: "منجزة" },
+      addButton: "إضافة",
+      addingButton: "جارٍ الإضافة…",
+      updateButton: "تحديث",
+      empty: "لا توجد مهام بعد.",
+      errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
+    },
+    projectDocumentsSection: {
+      title: "المستندات",
+      tableTitle: "العنوان",
+      tableType: "النوع",
+      tableStatus: "الحالة",
+      titleLabel: "العنوان",
+      fileUrlLabel: "رابط الملف",
+      typeLabel: "النوع",
+      statusLabel: "الحالة",
+      statuses: { WIP: "قيد الإنجاز", Shared: "مشترك", Published: "منشور", Archived: "مؤرشف" },
+      addButton: "إضافة",
+      addingButton: "جارٍ الإضافة…",
+      updateButton: "تحديث",
+      empty: "لا توجد مستندات بعد.",
+      errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
+    },
+    projectClarifications: {
+      title: "طلبات التوضيح",
+      tableQuestion: "السؤال",
+      tablePriority: "الأولوية",
+      tableStatus: "الحالة",
+      questionLabel: "السؤال",
+      priorityLabel: "الأولوية",
+      priorities: { low: "منخفضة", medium: "متوسطة", high: "عالية" },
+      statusLabel: "الحالة",
+      statuses: { open: "مفتوح", answered: "تمت الإجابة", closed: "مغلق" },
+      addButton: "إضافة",
+      addingButton: "جارٍ الإضافة…",
+      updateButton: "تحديث",
+      empty: "لا توجد طلبات بعد.",
+      errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
+    },
+    projectApprovals: {
+      title: "طلبات الموافقة",
+      tableTitle: "العنوان",
+      tableStatus: "الحالة",
+      titleLabel: "العنوان",
+      descriptionLabel: "الوصف",
+      statusLabel: "الحالة",
+      statuses: {
+        submitted: "مُقدَّمة",
+        under_review: "قيد المراجعة",
+        approved: "موافَق عليها",
+        rejected: "مرفوضة",
+        revised: "مُعدَّلة",
+      },
+      addButton: "إضافة",
+      addingButton: "جارٍ الإضافة…",
+      updateButton: "تحديث",
+      empty: "لا توجد طلبات موافقة بعد.",
       errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
     },
   },
