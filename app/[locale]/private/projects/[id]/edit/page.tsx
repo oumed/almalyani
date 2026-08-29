@@ -3,7 +3,9 @@ import { notFound, redirect } from "next/navigation";
 import { db } from "@/db";
 import {
   approvalSubmissions,
+  buildingPermits,
   clarificationRequests,
+  occupancyPermits,
   projectDocuments,
   projectPhases,
   projectTasks,
@@ -21,6 +23,8 @@ import { TasksSection, type TaskRow } from "../TasksSection";
 import { DocumentsSection, type DocumentRow } from "../DocumentsSection";
 import { ClarificationsSection, type ClarificationRow } from "../ClarificationsSection";
 import { ApprovalsSection, type ApprovalRow } from "../ApprovalsSection";
+import { BuildingPermitSection, type BuildingPermitValues } from "../BuildingPermitSection";
+import { OccupancyPermitSection, type OccupancyPermitValues } from "../OccupancyPermitSection";
 
 export default async function EditProjectPage({
   params,
@@ -93,6 +97,18 @@ export default async function EditProjectPage({
     .from(approvalSubmissions)
     .where(eq(approvalSubmissions.projectId, target.id));
 
+  const [buildingPermitRow] = await db
+    .select()
+    .from(buildingPermits)
+    .where(eq(buildingPermits.projectId, target.id))
+    .limit(1);
+
+  const [occupancyPermitRow] = await db
+    .select()
+    .from(occupancyPermits)
+    .where(eq(occupancyPermits.projectId, target.id))
+    .limit(1);
+
   const cold = target.coldAttributes as {
     title?: string;
     description?: string;
@@ -160,6 +176,32 @@ export default async function EditProjectPage({
     return { id: a.id, title: attrs.title ?? "", status: a.status };
   });
 
+  const buildingPermitAttrs = (buildingPermitRow?.attributes ?? {}) as {
+    rokhas_reference?: string;
+    is_civil_tax_paid?: boolean;
+    is_urban_tax_paid?: boolean;
+    is_commune_tax_paid?: boolean;
+    total_tax_amount?: number;
+  };
+  const buildingPermitValues: BuildingPermitValues = {
+    rokhasReference: buildingPermitAttrs.rokhas_reference ?? "",
+    status: buildingPermitRow?.status ?? "draft",
+    isCivilTaxPaid: buildingPermitAttrs.is_civil_tax_paid ?? false,
+    isUrbanTaxPaid: buildingPermitAttrs.is_urban_tax_paid ?? false,
+    isCommuneTaxPaid: buildingPermitAttrs.is_commune_tax_paid ?? false,
+    totalTaxAmount: buildingPermitAttrs.total_tax_amount ?? 0,
+  };
+
+  const occupancyPermitAttrs = (occupancyPermitRow?.attributes ?? {}) as {
+    inspection_notes?: string;
+    compliance_certificate_url?: string;
+  };
+  const occupancyPermitValues: OccupancyPermitValues = {
+    status: occupancyPermitRow?.status ?? "not_requested",
+    inspectionNotes: occupancyPermitAttrs.inspection_notes ?? "",
+    certificateUrl: occupancyPermitAttrs.compliance_certificate_url ?? "",
+  };
+
   return (
     <main className="relative flex flex-1 flex-col items-center px-6 py-16 sm:py-24">
       <div className="flex w-full max-w-2xl flex-col gap-8">
@@ -221,6 +263,22 @@ export default async function EditProjectPage({
         <ClarificationsSection locale={locale} dict={dict} projectId={target.id} clarifications={clarifications} />
 
         <ApprovalsSection locale={locale} dict={dict} projectId={target.id} approvals={approvals} />
+
+        <BuildingPermitSection
+          key={JSON.stringify(buildingPermitValues)}
+          locale={locale}
+          dict={dict}
+          projectId={target.id}
+          values={buildingPermitValues}
+        />
+
+        <OccupancyPermitSection
+          key={JSON.stringify(occupancyPermitValues)}
+          locale={locale}
+          dict={dict}
+          projectId={target.id}
+          values={occupancyPermitValues}
+        />
       </div>
     </main>
   );
