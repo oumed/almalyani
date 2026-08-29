@@ -139,20 +139,10 @@ not something to discover mid-implementation.
 ## Design-level fit against Almalyani's actual scope
 
 This schema is aimed at the *next* phase (client/architect matching,
-permits, BIM) — none of which is in scope yet. Per the project's own
-constraints, this phase is infrastructure + Coming Soon page only; CRM,
-project management, and business functionality are explicitly deferred. So:
+permits, BIM) — CRM/project management functionality that was previously
+deferred. The decision to build this phase now (2026-08-29) was made
+explicitly, ahead of the original plan.
 
-- **Do not apply this to the Neon `main`/`preview`/`development` branches
-  yet.** `db/schema.ts` stays a placeholder until there's an actual feature
-  phase to build against.
-- Keep this SQL and diagram as reference material for that future phase —
-  it's a strong starting point (the Hot/Cold JSONB split, the Moroccan
-  permit workflow modeling from the real architect's process description,
-  and the RLS approach are all sound ideas), but it needs the partitioning
-  and `jsonb_matches_schema` issues fixed, and translating into Drizzle
-  schema + migrations rather than a hand-written SQL file, before it's
-  production-ready.
 - Missing from this version (noted in the original chat, not part of this
   validation): the assistant's answer to the last question ("static vs.
   dynamic/EAV attributes for the `projects` table") wasn't fully captured —
@@ -161,3 +151,42 @@ project management, and business functionality are explicitly deferred. So:
   `cold_attributes` columns) rather than true EAV, which is a reasonable
   middle ground but wasn't an explicit, deliberated decision in what we
   could retrieve.
+
+## Applied to Neon (2026-08-29)
+
+Translated into `db/schema.ts` (Drizzle) + `drizzle/0000_lame_stryfe.sql`,
+and applied to all three Neon branches (`development`, `preview`, `main`).
+What changed on the way from `schema-v1.sql` to the live schema:
+
+- **Driver switched**: `db/index.ts` now uses `drizzle-orm/neon-serverless`
+  (`Pool` over WebSockets) instead of `neon-http`, resolving the
+  RLS/transaction incompatibility flagged above (option b was chosen).
+  `neon-http` stays a dead end for any RLS-scoped query on this schema.
+- **`pg_cron` dropped entirely.** Confirmed directly against this Neon
+  project: it can only be created in whichever database
+  `cron.database_name` points to, which is not `neondb` here — `CREATE
+  EXTENSION pg_cron` fails outright. We never planned to rely on it anyway
+  (see bug #3 above), so it's just not in the migration.
+- **PostGIS confirmed available** on the real project (`pg_available_extensions`
+  lists `postgis` 3.6.0), so no fallback was needed there.
+- **RLS's `GRANT` gap (bug #4) fixed**: `GRANT SELECT ON project_team_members
+  TO PUBLIC` added to the migration.
+- Re-validated end to end on the `development` branch before promoting to
+  `preview`/`main`: inserted a real user + project, confirmed generated
+  columns (`cin`, `phone`, `full_name`, `title_generated`,
+  `cadastral_generated`, `budget_min_generated`), confirmed the
+  `updated_at` trigger actually advances `updated_at` past `created_at`
+  (must be tested across separate transactions — `NOW()` is frozen for the
+  lifetime of one transaction, so a same-transaction insert+update looks
+  like the trigger did nothing when it didn't), and confirmed RLS using a
+  genuinely non-owner probe role (a stranger sees 0 rows, the project's
+  owner sees 1) — table owners bypass RLS by default in Postgres, so
+  testing as `neondb_owner` would have silently proven nothing.
+- **RLS is not yet enforced by the app.** `db/index.ts` connects as
+  `neondb_owner` (the table owner), which bypasses RLS unless the table is
+  altered with `FORCE ROW LEVEL SECURITY` — and even then, nothing in the
+  app currently sets `app.current_user_id`, since there's no real
+  authentication yet (per the project's own scope). The policies exist and
+  are proven to work under a non-owner role; wiring them into the app is
+  real auth-system work for when that phase starts, not a follow-up to
+  this migration.

@@ -10,7 +10,13 @@
 -- columns (created_at/updated_at) added to every table, partitioning
 -- removed (broke every FK -- see validation-notes.md), pg_jsonschema
 -- extension added (was referenced but never installed in v1).
--- Still reference material for a future phase -- not applied live.
+--
+-- Applied live 2026-08-29 to all three Neon branches (dev/preview/main) as
+-- db/schema.ts + drizzle/0000_lame_stryfe.sql -- see validation-notes.md
+-- "Applied to Neon" section for what changed on the way to production
+-- (pg_cron dropped, driver switched to neon-serverless). This file stays
+-- as the original hand-written reference; the Drizzle migration is the
+-- source of truth for the live schema going forward.
 -- ============================================================
 
 -- 1. EXTENSIONS
