@@ -1,13 +1,26 @@
 import { eq } from "drizzle-orm";
 import { notFound, redirect } from "next/navigation";
 import { db } from "@/db";
-import { projects, projectPhases, projectTeamMembers, users } from "@/db/schema";
+import {
+  approvalSubmissions,
+  clarificationRequests,
+  projectDocuments,
+  projectPhases,
+  projectTasks,
+  projectTeamMembers,
+  projects,
+  users,
+} from "@/db/schema";
 import { dictionaries, isLocale } from "@/lib/i18n";
 import { getCurrentUser } from "@/lib/session";
 import { ProjectForm } from "../../ProjectForm";
 import { updateProject, closeProject } from "../../actions";
 import { TeamSection, type TeamMemberRow } from "../TeamSection";
 import { PhasesSection, type PhaseRow } from "../PhasesSection";
+import { TasksSection, type TaskRow } from "../TasksSection";
+import { DocumentsSection, type DocumentRow } from "../DocumentsSection";
+import { ClarificationsSection, type ClarificationRow } from "../ClarificationsSection";
+import { ApprovalsSection, type ApprovalRow } from "../ApprovalsSection";
 
 export default async function EditProjectPage({
   params,
@@ -51,6 +64,35 @@ export default async function EditProjectPage({
     .where(eq(projectPhases.projectId, target.id))
     .orderBy(projectPhases.displayOrder);
 
+  const taskRows = await db
+    .select({
+      id: projectTasks.id,
+      phaseId: projectTasks.phaseId,
+      phaseName: projectPhases.attributes,
+      status: projectTasks.status,
+      attributes: projectTasks.attributes,
+      assigneeName: users.fullName,
+    })
+    .from(projectTasks)
+    .innerJoin(projectPhases, eq(projectPhases.id, projectTasks.phaseId))
+    .leftJoin(users, eq(users.id, projectTasks.assignedToId))
+    .where(eq(projectPhases.projectId, target.id));
+
+  const documentRows = await db
+    .select()
+    .from(projectDocuments)
+    .where(eq(projectDocuments.projectId, target.id));
+
+  const clarificationRows = await db
+    .select()
+    .from(clarificationRequests)
+    .where(eq(clarificationRequests.projectId, target.id));
+
+  const approvalRows = await db
+    .select()
+    .from(approvalSubmissions)
+    .where(eq(approvalSubmissions.projectId, target.id));
+
   const cold = target.coldAttributes as {
     title?: string;
     description?: string;
@@ -77,6 +119,45 @@ export default async function EditProjectPage({
       name: attrs.name ?? "",
       progressPct: attrs.progress_pct ?? 0,
     };
+  });
+
+  const tasks: TaskRow[] = taskRows.map((r) => {
+    const phaseAttrs = r.phaseName as { name?: string };
+    const taskAttrs = r.attributes as { title?: string };
+    return {
+      id: r.id,
+      phaseId: r.phaseId,
+      phaseName: phaseAttrs.name ?? "",
+      title: taskAttrs.title ?? "",
+      status: r.status,
+      assigneeName: r.assigneeName,
+    };
+  });
+
+  const documents: DocumentRow[] = documentRows.map((d) => {
+    const attrs = d.attributes as { title?: string; file_url?: string; document_type?: string };
+    return {
+      id: d.id,
+      title: attrs.title ?? "",
+      fileUrl: attrs.file_url ?? "",
+      documentType: attrs.document_type ?? "",
+      status: d.status,
+    };
+  });
+
+  const clarifications: ClarificationRow[] = clarificationRows.map((c) => {
+    const attrs = c.attributes as { question?: string; priority?: string };
+    return {
+      id: c.id,
+      question: attrs.question ?? "",
+      priority: attrs.priority ?? "medium",
+      status: c.status,
+    };
+  });
+
+  const approvals: ApprovalRow[] = approvalRows.map((a) => {
+    const attrs = a.attributes as { title?: string };
+    return { id: a.id, title: attrs.title ?? "", status: a.status };
   });
 
   return (
@@ -125,6 +206,21 @@ export default async function EditProjectPage({
         />
 
         <PhasesSection locale={locale} dict={dict} projectId={target.id} phases={phases} />
+
+        <TasksSection
+          locale={locale}
+          dict={dict}
+          projectId={target.id}
+          tasks={tasks}
+          phases={phases.map((p) => ({ id: p.id, name: p.name }))}
+          users={allUsers.map((u) => ({ id: u.id, label: u.fullName || u.email }))}
+        />
+
+        <DocumentsSection locale={locale} dict={dict} projectId={target.id} documents={documents} />
+
+        <ClarificationsSection locale={locale} dict={dict} projectId={target.id} clarifications={clarifications} />
+
+        <ApprovalsSection locale={locale} dict={dict} projectId={target.id} approvals={approvals} />
       </div>
     </main>
   );
