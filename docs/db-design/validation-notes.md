@@ -1,7 +1,8 @@
 # Validation notes — DeepSeek schema v1
 
 Source: [DeepSeek chat](https://chat.deepseek.com/share/rf9hnjwtysm5m6fdp4) (imported 2026-08-28).
-Files: `deepseek-schema-v1.sql`, `deepseek-erd-v1.mmd`.
+Files: `schema-v1.sql`, `erd-v1.mmd`, `erd-v1.html` (the rendered, published
+version of the same diagram — open it directly in a browser).
 
 Validated by running the script against a real `postgis/postgis:17-3.4` Docker
 container (not just eyeballed) — inserted test rows, checked generated
@@ -35,7 +36,7 @@ and re-validated end to end:
   tables.** v1 only had them on `users` and `projects` — every other table
   had no way to sort by creation time or detect modification at all.
 - The two items below were already recommended in this file and are now
-  actually applied in `deepseek-schema-v1.sql`: partitioning removed from
+  actually applied in `schema-v1.sql`: partitioning removed from
   `projects`, and `CREATE EXTENSION IF NOT EXISTS "pg_jsonschema"` added.
 
 Re-validated after all of the above: full `CREATE TABLE`/`TRIGGER`/`INDEX`/
@@ -84,10 +85,11 @@ an `UPDATE`), RLS re-tested against the renamed `project_team_members` table
 
 4. **RLS policies need matching `GRANT`s on every table referenced inside
    them, not just the base table.** `professional_project_policy` on
-   `projects` subqueries `project_team` — any role that queries `projects`
-   also needs `SELECT` on `project_team`, or every query fails outright with
-   a permission error (not silently — confirmed by testing). Easy to miss;
-   worth a comment in the final script.
+   `projects` subqueries `project_team_members` (named `project_team` at the
+   time this bug was found — see the naming changelog above) — any role that
+   queries `projects` also needs `SELECT` on `project_team_members`, or every
+   query fails outright with a permission error (not silently — confirmed by
+   testing). Easy to miss; worth a comment in the final script.
 
 ## Confirmed working (tested with real inserts)
 
