@@ -35,20 +35,22 @@ export default async function Home({
         ))}
       </nav>
 
-      <div className="relative flex max-w-2xl flex-col items-center gap-10">
-        <p
-          className="font-[family-name:var(--font-serif)] text-2xl font-medium tracking-[0.3em] text-accent uppercase"
-          dir="ltr"
-        >
-          {dict.brand}
-        </p>
-
-        <div className="flex flex-col gap-5">
-          <h1 className="font-[family-name:var(--font-serif)] text-4xl font-medium leading-tight text-foreground sm:text-5xl">
-            {dict.headline}
+      <div className="relative flex max-w-2xl flex-col items-center gap-8">
+        <div className="flex flex-col items-center gap-2">
+          <h1
+            className="font-[family-name:var(--font-serif)] text-3xl font-medium tracking-[0.15em] text-foreground uppercase sm:text-4xl"
+            dir="ltr"
+          >
+            {dict.brand}
           </h1>
-          <p className="text-lg leading-relaxed text-muted">{dict.subtext}</p>
+          <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted">
+            {dict.title}
+          </p>
         </div>
+
+        <p className="font-[family-name:var(--font-serif)] text-lg italic text-accent">
+          {dict.tagline}
+        </p>
 
         <div className="flex items-center gap-4" aria-hidden="true">
           <span className="h-px w-12 bg-line" />
@@ -56,11 +58,24 @@ export default async function Home({
           <span className="h-px w-12 bg-line" />
         </div>
 
-        <div className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-foreground">
-            {dict.underConstruction}
-          </h2>
-          <p className="text-base text-muted">{dict.body}</p>
+        <ul className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm font-medium uppercase tracking-[0.1em] text-foreground">
+          {dict.services.map((service, i) => (
+            <li key={service} className="flex items-center gap-3">
+              {i > 0 && <span className="text-accent" aria-hidden="true">·</span>}
+              {service}
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex flex-col items-center gap-2 text-base text-muted">
+          <p dir="ltr">{dict.addressLine1}</p>
+          <p dir="ltr">{dict.addressLine2}</p>
+          <p dir="ltr">
+            {dict.phoneLandline} <span aria-hidden="true">·</span> {dict.phoneMobile}
+          </p>
+          <a href={`mailto:${dict.email}`} className="hover:text-foreground" dir="ltr">
+            {dict.email}
+          </a>
         </div>
       </div>
 

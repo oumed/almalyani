@@ -18,10 +18,14 @@ type Dictionary = {
   metaTitle: string;
   metaDescription: string;
   brand: string;
-  headline: string;
-  subtext: string;
-  underConstruction: string;
-  body: string;
+  title: string;
+  tagline: string;
+  services: [string, string, string];
+  addressLine1: string;
+  addressLine2: string;
+  phoneLandline: string;
+  phoneMobile: string;
+  email: string;
   copyright: string;
   teamLogin: string;
   privateTitle: string;
@@ -38,16 +42,19 @@ type Dictionary = {
 
 export const dictionaries: Record<Locale, Dictionary> = {
   en: {
-    metaTitle: "Almalyani — The Future of Moroccan Architecture Starts Here",
+    metaTitle: "Abdelkrim Meliani — Architect D.P.L.G",
     metaDescription:
-      "A modern platform designed to simplify and improve the daily work of Moroccan architects. Website under construction.",
-    brand: "Almalyani",
-    headline: "The Future of Moroccan Architecture Starts Here.",
-    subtext:
-      "A modern platform designed to simplify and improve the daily work of Moroccan architects.",
-    underConstruction: "Website Under Construction",
-    body: "We're currently building something new for architects across Morocco.",
-    copyright: "© 2026 Almalyani",
+      "Architecture practice in Fès, Morocco — design, studies, and building permits.",
+    brand: "Abdelkrim Meliani",
+    title: "Architect D.P.L.G",
+    tagline: "Designing today to inspire tomorrow",
+    services: ["Design", "Studies", "Building Permits"],
+    addressLine1: "70, Av Hassan II – Fès",
+    addressLine2: "(Cinéma Empire)",
+    phoneLandline: "05 35 65 25 57",
+    phoneMobile: "06 61 20 23 54",
+    email: "architecte.meliani@gmail.com",
+    copyright: "© 2026 Abdelkrim Meliani",
     teamLogin: "Team Login",
     privateTitle: "Private Area",
     privateSubtitle: "Enter the password to continue.",
@@ -62,16 +69,19 @@ export const dictionaries: Record<Locale, Dictionary> = {
     logoutLabel: "Log out",
   },
   fr: {
-    metaTitle: "Almalyani — L'avenir de l'architecture marocaine commence ici",
+    metaTitle: "Abdelkrim Meliani — Architecte D.P.L.G",
     metaDescription:
-      "Une plateforme moderne conçue pour simplifier et améliorer le travail quotidien des architectes marocains. Site en construction.",
-    brand: "Almalyani",
-    headline: "L'avenir de l'architecture marocaine commence ici.",
-    subtext:
-      "Une plateforme moderne conçue pour simplifier et améliorer le travail quotidien des architectes marocains.",
-    underConstruction: "Site en construction",
-    body: "Nous construisons actuellement quelque chose de nouveau pour les architectes à travers le Maroc.",
-    copyright: "© 2026 Almalyani",
+      "Cabinet d'architecture à Fès — conception, études et permis de construire.",
+    brand: "Abdelkrim Meliani",
+    title: "Architecte D.P.L.G",
+    tagline: "Concevoir aujourd'hui pour inspirer demain",
+    services: ["Conception", "Études", "Permis de construire"],
+    addressLine1: "70, Av Hassan II – Fès",
+    addressLine2: "(Cinéma Empire)",
+    phoneLandline: "05 35 65 25 57",
+    phoneMobile: "06 61 20 23 54",
+    email: "architecte.meliani@gmail.com",
+    copyright: "© 2026 Abdelkrim Meliani",
     teamLogin: "Connexion équipe",
     privateTitle: "Espace privé",
     privateSubtitle: "Entrez le mot de passe pour continuer.",
@@ -86,16 +96,18 @@ export const dictionaries: Record<Locale, Dictionary> = {
     logoutLabel: "Se déconnecter",
   },
   ar: {
-    metaTitle: "ألمالياني — مستقبل الهندسة المعمارية المغربية يبدأ هنا",
-    metaDescription:
-      "منصة حديثة مصممة لتبسيط وتحسين العمل اليومي للمهندسين المعماريين المغاربة. الموقع قيد الإنشاء.",
-    brand: "Almalyani",
-    headline: "مستقبل الهندسة المعمارية المغربية يبدأ هنا.",
-    subtext:
-      "منصة حديثة مصممة لتبسيط وتحسين العمل اليومي للمهندسين المعماريين المغاربة.",
-    underConstruction: "الموقع قيد الإنشاء",
-    body: "نحن نعمل حاليًا على بناء شيء جديد للمهندسين المعماريين في جميع أنحاء المغرب.",
-    copyright: "© 2026 Almalyani",
+    metaTitle: "عبد الكريم مليان — مهندس معماري",
+    metaDescription: "مكتب هندسة معمارية بفاس — تصميم، دراسات، ورخص البناء.",
+    brand: "Abdelkrim Meliani",
+    title: "مهندس معماري (D.P.L.G)",
+    tagline: "نُصمم اليوم لنُلهم الغد",
+    services: ["التصميم", "الدراسات", "رخص البناء"],
+    addressLine1: "70, Av Hassan II – Fès",
+    addressLine2: "(Cinéma Empire)",
+    phoneLandline: "05 35 65 25 57",
+    phoneMobile: "06 61 20 23 54",
+    email: "architecte.meliani@gmail.com",
+    copyright: "© 2026 عبد الكريم مليان",
     teamLogin: "دخول الفريق",
     privateTitle: "المنطقة الخاصة",
     privateSubtitle: "أدخل كلمة المرور للمتابعة.",
