@@ -281,6 +281,35 @@ type Dictionary = {
     empty: string;
     errorGeneric: string;
   };
+  buildingPermitSection: {
+    title: string;
+    rokhasRefLabel: string;
+    statusLabel: string;
+    statuses: { draft: string; submitted: string; rejected: string; approved: string; delivered: string };
+    civilTaxLabel: string;
+    urbanTaxLabel: string;
+    communeTaxLabel: string;
+    totalTaxLabel: string;
+    saveButton: string;
+    savingButton: string;
+    errorGeneric: string;
+  };
+  occupancyPermitSection: {
+    title: string;
+    statusLabel: string;
+    statuses: {
+      not_requested: string;
+      inspection_scheduled: string;
+      compliance_ok: string;
+      issued: string;
+      rejected: string;
+    };
+    notesLabel: string;
+    certificateUrlLabel: string;
+    saveButton: string;
+    savingButton: string;
+    errorGeneric: string;
+  };
 };
 
 export const dictionaries: Record<Locale, Dictionary> = {
@@ -612,6 +641,41 @@ export const dictionaries: Record<Locale, Dictionary> = {
       empty: "No approval submissions yet.",
       errorGeneric: "Something went wrong. Please try again.",
     },
+    buildingPermitSection: {
+      title: "Building Permit",
+      rokhasRefLabel: "Rokhas reference",
+      statusLabel: "Status",
+      statuses: {
+        draft: "Draft",
+        submitted: "Submitted",
+        rejected: "Rejected",
+        approved: "Approved",
+        delivered: "Delivered",
+      },
+      civilTaxLabel: "Civil tax paid",
+      urbanTaxLabel: "Urban tax paid",
+      communeTaxLabel: "Commune tax paid",
+      totalTaxLabel: "Total tax amount (MAD)",
+      saveButton: "Save",
+      savingButton: "Saving…",
+      errorGeneric: "Something went wrong. Please try again.",
+    },
+    occupancyPermitSection: {
+      title: "Occupancy Permit",
+      statusLabel: "Status",
+      statuses: {
+        not_requested: "Not requested",
+        inspection_scheduled: "Inspection scheduled",
+        compliance_ok: "Compliance OK",
+        issued: "Issued",
+        rejected: "Rejected",
+      },
+      notesLabel: "Inspection notes",
+      certificateUrlLabel: "Compliance certificate URL",
+      saveButton: "Save",
+      savingButton: "Saving…",
+      errorGeneric: "Something went wrong. Please try again.",
+    },
   },
   fr: {
     metaTitle: "Abdelkrim Meliani — Architecte D.P.L.G",
@@ -941,6 +1005,41 @@ export const dictionaries: Record<Locale, Dictionary> = {
       empty: "Aucune soumission pour le moment.",
       errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
     },
+    buildingPermitSection: {
+      title: "Permis de Construire",
+      rokhasRefLabel: "Référence Rokhas",
+      statusLabel: "Statut",
+      statuses: {
+        draft: "Brouillon",
+        submitted: "Soumis",
+        rejected: "Rejeté",
+        approved: "Approuvé",
+        delivered: "Délivré",
+      },
+      civilTaxLabel: "Taxe civile payée",
+      urbanTaxLabel: "Taxe urbaine payée",
+      communeTaxLabel: "Taxe communale payée",
+      totalTaxLabel: "Montant total des taxes (MAD)",
+      saveButton: "Enregistrer",
+      savingButton: "Enregistrement…",
+      errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+    },
+    occupancyPermitSection: {
+      title: "Permis d'Habiter",
+      statusLabel: "Statut",
+      statuses: {
+        not_requested: "Non demandé",
+        inspection_scheduled: "Inspection planifiée",
+        compliance_ok: "Conformité validée",
+        issued: "Délivré",
+        rejected: "Rejeté",
+      },
+      notesLabel: "Notes d'inspection",
+      certificateUrlLabel: "URL du certificat de conformité",
+      saveButton: "Enregistrer",
+      savingButton: "Enregistrement…",
+      errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+    },
   },
   ar: {
     metaTitle: "عبد الكريم مليان — مهندس معماري",
@@ -1266,6 +1365,41 @@ export const dictionaries: Record<Locale, Dictionary> = {
       addingButton: "جارٍ الإضافة…",
       updateButton: "تحديث",
       empty: "لا توجد طلبات موافقة بعد.",
+      errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
+    },
+    buildingPermitSection: {
+      title: "رخصة البناء",
+      rokhasRefLabel: "مرجع رخص",
+      statusLabel: "الحالة",
+      statuses: {
+        draft: "مسودة",
+        submitted: "تم الإيداع",
+        rejected: "مرفوضة",
+        approved: "موافَق عليها",
+        delivered: "مُسلَّمة",
+      },
+      civilTaxLabel: "الضريبة المدنية مؤداة",
+      urbanTaxLabel: "الضريبة الحضرية مؤداة",
+      communeTaxLabel: "ضريبة الجماعة مؤداة",
+      totalTaxLabel: "إجمالي مبلغ الضرائب (درهم)",
+      saveButton: "حفظ",
+      savingButton: "جارٍ الحفظ…",
+      errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
+    },
+    occupancyPermitSection: {
+      title: "رخصة السكن",
+      statusLabel: "الحالة",
+      statuses: {
+        not_requested: "لم تُطلب",
+        inspection_scheduled: "تم تحديد موعد المعاينة",
+        compliance_ok: "المطابقة مؤكدة",
+        issued: "صادرة",
+        rejected: "مرفوضة",
+      },
+      notesLabel: "ملاحظات المعاينة",
+      certificateUrlLabel: "رابط شهادة المطابقة",
+      saveButton: "حفظ",
+      savingButton: "جارٍ الحفظ…",
       errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
     },
   },
