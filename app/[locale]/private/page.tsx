@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { dictionaries, isLocale } from "@/lib/i18n";
+import { getCurrentUser } from "@/lib/session";
 import { logout } from "../private-login/actions";
 
 export default async function PrivatePage({
@@ -10,6 +12,7 @@ export default async function PrivatePage({
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const dict = dictionaries[locale];
+  const currentUser = await getCurrentUser();
 
   return (
     <main className="relative flex flex-1 flex-col items-center justify-center px-6 py-24 text-center">
@@ -27,6 +30,15 @@ export default async function PrivatePage({
           </h1>
           <p className="text-base text-muted">{dict.privateBody}</p>
         </div>
+
+        {currentUser?.userType === "admin" && (
+          <Link
+            href={`/${locale}/private/users`}
+            className="text-sm text-accent underline underline-offset-4 hover:text-foreground"
+          >
+            {dict.manageUsers}
+          </Link>
+        )}
 
         <form action={logout.bind(null, locale)}>
           <button

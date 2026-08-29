@@ -96,6 +96,38 @@ type Dictionary = {
   privateYoureIn: string;
   privateBody: string;
   logoutLabel: string;
+  manageUsers: string;
+  usersAdmin: {
+    title: string;
+    addUser: string;
+    tableEmail: string;
+    tableName: string;
+    tableRole: string;
+    tableStatus: string;
+    edit: string;
+    back: string;
+    emailLabel: string;
+    passwordLabel: string;
+    passwordEditHint: string;
+    firstNameLabel: string;
+    lastNameLabel: string;
+    phoneLabel: string;
+    cinLabel: string;
+    roleLabel: string;
+    statusLabel: string;
+    roles: { client: string; professional: string; admin: string };
+    statuses: { pending: string; active: string; suspended: string; banned: string };
+    saveButton: string;
+    savingButton: string;
+    createButton: string;
+    creatingButton: string;
+    banButton: string;
+    banningButton: string;
+    banConfirm: string;
+    errorGeneric: string;
+    errorDuplicate: string;
+    errorForbidden: string;
+  };
 };
 
 export const dictionaries: Record<Locale, Dictionary> = {
@@ -242,6 +274,38 @@ export const dictionaries: Record<Locale, Dictionary> = {
     privateBody:
       "The private area is coming soon. This page confirms the gate works — real content lands here in a future phase.",
     logoutLabel: "Log out",
+    manageUsers: "Manage Users",
+    usersAdmin: {
+      title: "Users",
+      addUser: "Add User",
+      tableEmail: "Username",
+      tableName: "Name",
+      tableRole: "Role",
+      tableStatus: "Status",
+      edit: "Edit",
+      back: "Back",
+      emailLabel: "Username (email)",
+      passwordLabel: "Password",
+      passwordEditHint: "Leave blank to keep the current password",
+      firstNameLabel: "First name",
+      lastNameLabel: "Last name",
+      phoneLabel: "Phone (10 digits)",
+      cinLabel: "CIN",
+      roleLabel: "Role",
+      statusLabel: "Status",
+      roles: { client: "Client", professional: "Professional", admin: "Admin" },
+      statuses: { pending: "Pending", active: "Active", suspended: "Suspended", banned: "Banned" },
+      saveButton: "Save Changes",
+      savingButton: "Saving…",
+      createButton: "Create User",
+      creatingButton: "Creating…",
+      banButton: "Ban User",
+      banningButton: "Banning…",
+      banConfirm: "Ban this user? They will no longer be able to log in.",
+      errorGeneric: "Something went wrong. Please check the fields and try again.",
+      errorDuplicate: "That username, phone, or CIN is already in use.",
+      errorForbidden: "You don't have access to this page.",
+    },
   },
   fr: {
     metaTitle: "Abdelkrim Meliani — Architecte D.P.L.G",
@@ -386,6 +450,38 @@ export const dictionaries: Record<Locale, Dictionary> = {
     privateBody:
       "L'espace privé arrive bientôt. Cette page confirme que l'accès fonctionne — le contenu réel sera ajouté dans une prochaine phase.",
     logoutLabel: "Se déconnecter",
+    manageUsers: "Gérer les utilisateurs",
+    usersAdmin: {
+      title: "Utilisateurs",
+      addUser: "Ajouter un utilisateur",
+      tableEmail: "Nom d'utilisateur",
+      tableName: "Nom",
+      tableRole: "Rôle",
+      tableStatus: "Statut",
+      edit: "Modifier",
+      back: "Retour",
+      emailLabel: "Nom d'utilisateur (email)",
+      passwordLabel: "Mot de passe",
+      passwordEditHint: "Laisser vide pour conserver le mot de passe actuel",
+      firstNameLabel: "Prénom",
+      lastNameLabel: "Nom",
+      phoneLabel: "Téléphone (10 chiffres)",
+      cinLabel: "CIN",
+      roleLabel: "Rôle",
+      statusLabel: "Statut",
+      roles: { client: "Client", professional: "Professionnel", admin: "Administrateur" },
+      statuses: { pending: "En attente", active: "Actif", suspended: "Suspendu", banned: "Banni" },
+      saveButton: "Enregistrer",
+      savingButton: "Enregistrement…",
+      createButton: "Créer l'utilisateur",
+      creatingButton: "Création…",
+      banButton: "Bannir l'utilisateur",
+      banningButton: "Bannissement…",
+      banConfirm: "Bannir cet utilisateur ? Il ne pourra plus se connecter.",
+      errorGeneric: "Une erreur est survenue. Vérifiez les champs et réessayez.",
+      errorDuplicate: "Ce nom d'utilisateur, téléphone ou CIN est déjà utilisé.",
+      errorForbidden: "Vous n'avez pas accès à cette page.",
+    },
   },
   ar: {
     metaTitle: "عبد الكريم مليان — مهندس معماري",
@@ -528,5 +624,37 @@ export const dictionaries: Record<Locale, Dictionary> = {
     privateBody:
       "المنطقة الخاصة قادمة قريبًا. تؤكد هذه الصفحة أن الحماية تعمل — سيتم إضافة المحتوى الحقيقي في مرحلة قادمة.",
     logoutLabel: "تسجيل الخروج",
+    manageUsers: "إدارة المستخدمين",
+    usersAdmin: {
+      title: "المستخدمون",
+      addUser: "إضافة مستخدم",
+      tableEmail: "اسم المستخدم",
+      tableName: "الاسم",
+      tableRole: "الدور",
+      tableStatus: "الحالة",
+      edit: "تعديل",
+      back: "رجوع",
+      emailLabel: "اسم المستخدم (البريد الإلكتروني)",
+      passwordLabel: "كلمة المرور",
+      passwordEditHint: "اتركه فارغًا للاحتفاظ بكلمة المرور الحالية",
+      firstNameLabel: "الاسم الأول",
+      lastNameLabel: "اسم العائلة",
+      phoneLabel: "الهاتف (10 أرقام)",
+      cinLabel: "رقم البطاقة الوطنية",
+      roleLabel: "الدور",
+      statusLabel: "الحالة",
+      roles: { client: "عميل", professional: "مهني", admin: "مدير" },
+      statuses: { pending: "قيد الانتظار", active: "نشط", suspended: "موقوف", banned: "محظور" },
+      saveButton: "حفظ التغييرات",
+      savingButton: "جارٍ الحفظ…",
+      createButton: "إنشاء المستخدم",
+      creatingButton: "جارٍ الإنشاء…",
+      banButton: "حظر المستخدم",
+      banningButton: "جارٍ الحظر…",
+      banConfirm: "هل تريد حظر هذا المستخدم؟ لن يتمكن بعد الآن من تسجيل الدخول.",
+      errorGeneric: "حدث خطأ ما. تحقق من الحقول وحاول مرة أخرى.",
+      errorDuplicate: "اسم المستخدم أو الهاتف أو رقم البطاقة الوطنية مستخدم بالفعل.",
+      errorForbidden: "ليس لديك صلاحية الوصول إلى هذه الصفحة.",
+    },
   },
 };
