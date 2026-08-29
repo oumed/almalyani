@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Reference-only material with its own toolchain, not part of this app.
+    "ref/**",
   ]),
 ]);
 
