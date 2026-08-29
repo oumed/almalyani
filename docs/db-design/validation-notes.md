@@ -1,11 +1,49 @@
 # Validation notes — DeepSeek schema v1
 
 Source: [DeepSeek chat](https://chat.deepseek.com/share/rf9hnjwtysm5m6fdp4) (imported 2026-08-28).
-Files: `deepseek-schema-v1.sql` (verbatim as generated), `deepseek-erd-v1.mmd` (verbatim Mermaid source).
+Files: `deepseek-schema-v1.sql`, `deepseek-erd-v1.mmd`.
 
 Validated by running the script against a real `postgis/postgis:17-3.4` Docker
 container (not just eyeballed) — inserted test rows, checked generated
 columns, and exercised the RLS policies with a non-superuser role.
+
+## Changelog: naming pass (2026-08-29)
+
+The files no longer match the DeepSeek chat verbatim — a full naming-convention
+audit (against Postgres community style, Google's SQL style guide, and Simon
+Holywell's SQL Style Guide) found several real inconsistencies, all now fixed
+and re-validated end to end:
+
+- **Table renames** for clarity/consistency: `documents`→`project_documents`,
+  `document_revisions`→`document_versions`, `bids`→`project_proposals`,
+  `rfis`→`clarification_requests`, `submittals`→`approval_submissions`,
+  `construction_logs`→`site_progress_logs`, `bim_models`→`building_models`,
+  `bim_elements`→`building_model_components`, `project_team`→
+  `project_team_members` (the last one also fixes a real convention break —
+  every other table is a plural noun, `team` was a singular/collective one).
+- **`documents.cde_status` → `status`** — it was the only lifecycle column in
+  the whole schema not called `status`.
+- **FK columns to `users` now all look like FKs**: `assigned_to`, `raised_by`,
+  `created_by`, `uploaded_by` had no `_id` suffix despite being UUID foreign
+  keys, while `client_id`/`professional_id`/`user_id` did. Renamed to
+  `assigned_to_id`, `raised_by_id`, `created_by_id`, `uploaded_by_id`.
+- **Boolean JSON keys now match the `is_`/`has_` prefix used elsewhere**:
+  `tax_civil_paid`/`tax_urban_paid`/`tax_commune_paid` (inside
+  `projects.hot_attributes` and `building_permits.attributes`) → 
+  `is_civil_tax_paid`/`is_urban_tax_paid`/`is_commune_tax_paid`.
+- **`created_at`/`updated_at` + an auto-update trigger added to all 17
+  tables.** v1 only had them on `users` and `projects` — every other table
+  had no way to sort by creation time or detect modification at all.
+- The two items below were already recommended in this file and are now
+  actually applied in `deepseek-schema-v1.sql`: partitioning removed from
+  `projects`, and `CREATE EXTENSION IF NOT EXISTS "pg_jsonschema"` added.
+
+Re-validated after all of the above: full `CREATE TABLE`/`TRIGGER`/`INDEX`/
+`POLICY` script runs clean top to bottom, generated columns and the
+`updated_at` trigger both confirmed working (`created_at < updated_at` after
+an `UPDATE`), RLS re-tested against the renamed `project_team_members` table
+(owner sees their project, a stranger sees zero rows), and
+`jsonb_matches_schema` re-confirmed working against our real Neon dev branch.
 
 ## Bugs found (must fix before this schema is usable)
 
@@ -81,8 +119,9 @@ as the query that reads it:
   a dependent `SELECT current_setting(...)` batched together returned the
   value set moments earlier, in the same call.
 
-Net effect: **RLS-scoped queries (`projects`, `documents`, `rfis`) can't go
-through Drizzle's normal query builder as designed** — they'd need either:
+Net effect: **RLS-scoped queries (`projects`, `project_documents`,
+`clarification_requests`) can't go through Drizzle's normal query builder as
+designed** — they'd need either:
   a. raw parameterized SQL via `sql.transaction([...])` for just those
      tables (keeps `neon-http`, loses Drizzle's type-safe builder for that
      slice), or
