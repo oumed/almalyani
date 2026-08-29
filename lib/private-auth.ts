@@ -1,10 +1,11 @@
-// Lightweight shared-password gate for the private area. Not a user-account
-// system — one password, one signed cookie. Real per-user auth is a
-// separate, future piece of work.
+// Session cookie for the private area, backed by real per-user accounts
+// (see lib/password.ts for credential hashing). The cookie carries the
+// signed-in user's id and an expiry, HMAC-signed so the edge proxy can
+// validate it without a DB round-trip.
 
-export const PRIVATE_COOKIE_NAME = "private_access";
+export const PRIVATE_COOKIE_NAME = "private_session";
+export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 30; // 30 days
 
-const GRANT_MESSAGE = "granted";
 const encoder = new TextEncoder();
 
 async function hmacHex(secret: string, message: string): Promise<string> {
@@ -21,10 +22,6 @@ async function hmacHex(secret: string, message: string): Promise<string> {
     .join("");
 }
 
-export async function computeAccessToken(sessionSecret: string): Promise<string> {
-  return hmacHex(sessionSecret, GRANT_MESSAGE);
-}
-
 function timingSafeEqual(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
   let diff = 0;
@@ -34,11 +31,32 @@ function timingSafeEqual(a: string, b: string): boolean {
   return diff === 0;
 }
 
-export async function isValidAccessToken(
+export async function computeSessionToken(
+  sessionSecret: string,
+  userId: string
+): Promise<string> {
+  const expiresAt = Date.now() + SESSION_MAX_AGE_SECONDS * 1000;
+  const payload = `${userId}.${expiresAt}`;
+  const signature = await hmacHex(sessionSecret, payload);
+  return `${payload}.${signature}`;
+}
+
+export async function getSessionUserId(
   token: string | undefined | null,
   sessionSecret: string | undefined
-): Promise<boolean> {
-  if (!token || !sessionSecret) return false;
-  const expected = await computeAccessToken(sessionSecret);
-  return timingSafeEqual(token, expected);
+): Promise<string | null> {
+  if (!token || !sessionSecret) return null;
+
+  const parts = token.split(".");
+  if (parts.length !== 3) return null;
+  const [userId, expiresAtRaw, signature] = parts;
+
+  const expiresAt = Number(expiresAtRaw);
+  if (!Number.isFinite(expiresAt) || Date.now() > expiresAt) return null;
+
+  const payload = `${userId}.${expiresAtRaw}`;
+  const expectedSignature = await hmacHex(sessionSecret, payload);
+  if (!timingSafeEqual(signature, expectedSignature)) return null;
+
+  return userId;
 }
