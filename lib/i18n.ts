@@ -128,6 +128,47 @@ type Dictionary = {
     errorDuplicate: string;
     errorForbidden: string;
   };
+  manageProjects: string;
+  projectsAdmin: {
+    title: string;
+    addProject: string;
+    tableTitle: string;
+    tableClient: string;
+    tableStatus: string;
+    tableBudget: string;
+    edit: string;
+    back: string;
+    titleLabel: string;
+    clientLabel: string;
+    descriptionLabel: string;
+    cadastralLabel: string;
+    landSurfaceLabel: string;
+    builtSurfaceLabel: string;
+    budgetMinLabel: string;
+    budgetMaxLabel: string;
+    statusLabel: string;
+    statuses: {
+      draft: string;
+      topo_needed: string;
+      sketching: string;
+      client_review: string;
+      rokhas_submitted: string;
+      rokhas_rejected: string;
+      taxes_pending: string;
+      permit_issued: string;
+      construction: string;
+      occupancy_pending: string;
+      closed: string;
+    };
+    saveButton: string;
+    savingButton: string;
+    createButton: string;
+    creatingButton: string;
+    closeButton: string;
+    closingButton: string;
+    errorGeneric: string;
+    errorForbidden: string;
+  };
 };
 
 export const dictionaries: Record<Locale, Dictionary> = {
@@ -306,6 +347,47 @@ export const dictionaries: Record<Locale, Dictionary> = {
       errorDuplicate: "That username, phone, or CIN is already in use.",
       errorForbidden: "You don't have access to this page.",
     },
+    manageProjects: "Manage Projects",
+    projectsAdmin: {
+      title: "Projects",
+      addProject: "Add Project",
+      tableTitle: "Title",
+      tableClient: "Client",
+      tableStatus: "Status",
+      tableBudget: "Budget (MAD)",
+      edit: "Edit",
+      back: "Back",
+      titleLabel: "Title",
+      clientLabel: "Client",
+      descriptionLabel: "Description",
+      cadastralLabel: "Cadastral number",
+      landSurfaceLabel: "Land surface (m²)",
+      builtSurfaceLabel: "Built surface (m²)",
+      budgetMinLabel: "Budget min (MAD)",
+      budgetMaxLabel: "Budget max (MAD)",
+      statusLabel: "Status",
+      statuses: {
+        draft: "Draft",
+        topo_needed: "Topo needed",
+        sketching: "Sketching",
+        client_review: "Client review",
+        rokhas_submitted: "Rokhas submitted",
+        rokhas_rejected: "Rokhas rejected",
+        taxes_pending: "Taxes pending",
+        permit_issued: "Permit issued",
+        construction: "Construction",
+        occupancy_pending: "Occupancy pending",
+        closed: "Closed",
+      },
+      saveButton: "Save Changes",
+      savingButton: "Saving…",
+      createButton: "Create Project",
+      creatingButton: "Creating…",
+      closeButton: "Close Project",
+      closingButton: "Closing…",
+      errorGeneric: "Something went wrong. Please check the fields and try again.",
+      errorForbidden: "You don't have access to this page.",
+    },
   },
   fr: {
     metaTitle: "Abdelkrim Meliani — Architecte D.P.L.G",
@@ -482,6 +564,47 @@ export const dictionaries: Record<Locale, Dictionary> = {
       errorDuplicate: "Ce nom d'utilisateur, téléphone ou CIN est déjà utilisé.",
       errorForbidden: "Vous n'avez pas accès à cette page.",
     },
+    manageProjects: "Gérer les projets",
+    projectsAdmin: {
+      title: "Projets",
+      addProject: "Ajouter un projet",
+      tableTitle: "Titre",
+      tableClient: "Client",
+      tableStatus: "Statut",
+      tableBudget: "Budget (MAD)",
+      edit: "Modifier",
+      back: "Retour",
+      titleLabel: "Titre",
+      clientLabel: "Client",
+      descriptionLabel: "Description",
+      cadastralLabel: "Numéro cadastral",
+      landSurfaceLabel: "Surface du terrain (m²)",
+      builtSurfaceLabel: "Surface bâtie (m²)",
+      budgetMinLabel: "Budget min (MAD)",
+      budgetMaxLabel: "Budget max (MAD)",
+      statusLabel: "Statut",
+      statuses: {
+        draft: "Brouillon",
+        topo_needed: "Topographie requise",
+        sketching: "Esquisse",
+        client_review: "Revue client",
+        rokhas_submitted: "Rokhas soumis",
+        rokhas_rejected: "Rokhas rejeté",
+        taxes_pending: "Taxes en attente",
+        permit_issued: "Permis délivré",
+        construction: "Construction",
+        occupancy_pending: "Permis d'habiter en attente",
+        closed: "Clôturé",
+      },
+      saveButton: "Enregistrer",
+      savingButton: "Enregistrement…",
+      createButton: "Créer le projet",
+      creatingButton: "Création…",
+      closeButton: "Clôturer le projet",
+      closingButton: "Clôture…",
+      errorGeneric: "Une erreur est survenue. Vérifiez les champs et réessayez.",
+      errorForbidden: "Vous n'avez pas accès à cette page.",
+    },
   },
   ar: {
     metaTitle: "عبد الكريم مليان — مهندس معماري",
@@ -654,6 +777,47 @@ export const dictionaries: Record<Locale, Dictionary> = {
       banConfirm: "هل تريد حظر هذا المستخدم؟ لن يتمكن بعد الآن من تسجيل الدخول.",
       errorGeneric: "حدث خطأ ما. تحقق من الحقول وحاول مرة أخرى.",
       errorDuplicate: "اسم المستخدم أو الهاتف أو رقم البطاقة الوطنية مستخدم بالفعل.",
+      errorForbidden: "ليس لديك صلاحية الوصول إلى هذه الصفحة.",
+    },
+    manageProjects: "إدارة المشاريع",
+    projectsAdmin: {
+      title: "المشاريع",
+      addProject: "إضافة مشروع",
+      tableTitle: "العنوان",
+      tableClient: "العميل",
+      tableStatus: "الحالة",
+      tableBudget: "الميزانية (درهم)",
+      edit: "تعديل",
+      back: "رجوع",
+      titleLabel: "العنوان",
+      clientLabel: "العميل",
+      descriptionLabel: "الوصف",
+      cadastralLabel: "الرقم العقاري",
+      landSurfaceLabel: "مساحة الأرض (م²)",
+      builtSurfaceLabel: "المساحة المبنية (م²)",
+      budgetMinLabel: "الميزانية الدنيا (درهم)",
+      budgetMaxLabel: "الميزانية القصوى (درهم)",
+      statusLabel: "الحالة",
+      statuses: {
+        draft: "مسودة",
+        topo_needed: "بحاجة إلى مسح طوبوغرافي",
+        sketching: "التصميم الأولي",
+        client_review: "مراجعة العميل",
+        rokhas_submitted: "تم إيداع رخصة البناء",
+        rokhas_rejected: "رُفضت رخصة البناء",
+        taxes_pending: "الضرائب قيد الأداء",
+        permit_issued: "تم إصدار الرخصة",
+        construction: "قيد البناء",
+        occupancy_pending: "بانتظار رخصة السكن",
+        closed: "مغلق",
+      },
+      saveButton: "حفظ التغييرات",
+      savingButton: "جارٍ الحفظ…",
+      createButton: "إنشاء المشروع",
+      creatingButton: "جارٍ الإنشاء…",
+      closeButton: "إغلاق المشروع",
+      closingButton: "جارٍ الإغلاق…",
+      errorGeneric: "حدث خطأ ما. تحقق من الحقول وحاول مرة أخرى.",
       errorForbidden: "ليس لديك صلاحية الوصول إلى هذه الصفحة.",
     },
   },

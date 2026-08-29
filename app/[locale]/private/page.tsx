@@ -32,12 +32,20 @@ export default async function PrivatePage({
         </div>
 
         {currentUser?.userType === "admin" && (
-          <Link
-            href={`/${locale}/private/users`}
-            className="text-sm text-accent underline underline-offset-4 hover:text-foreground"
-          >
-            {dict.manageUsers}
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link
+              href={`/${locale}/private/users`}
+              className="text-sm text-accent underline underline-offset-4 hover:text-foreground"
+            >
+              {dict.manageUsers}
+            </Link>
+            <Link
+              href={`/${locale}/private/projects`}
+              className="text-sm text-accent underline underline-offset-4 hover:text-foreground"
+            >
+              {dict.manageProjects}
+            </Link>
+          </div>
         )}
 
         <form action={logout.bind(null, locale)}>
