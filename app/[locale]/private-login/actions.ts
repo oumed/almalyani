@@ -2,7 +2,11 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { computeAccessToken, PRIVATE_COOKIE_NAME } from "@/lib/private-auth";
+import { eq } from "drizzle-orm";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { computeSessionToken, PRIVATE_COOKIE_NAME, SESSION_MAX_AGE_SECONDS } from "@/lib/private-auth";
+import { verifyPassword } from "@/lib/password";
 import { defaultLocale, dictionaries, isLocale, type Locale } from "@/lib/i18n";
 
 export type LoginState = { error?: string };
@@ -19,26 +23,35 @@ export async function authenticate(
   const locale = localeFrom(formData);
   const dict = dictionaries[locale];
 
-  const sitePassword = process.env.SITE_PASSWORD;
   const sessionSecret = process.env.SESSION_SECRET;
-
-  if (!sitePassword || !sessionSecret) {
+  if (!sessionSecret) {
     return { error: dict.errorNotConfigured };
   }
 
+  const username = formData.get("username");
   const password = formData.get("password");
-  if (typeof password !== "string" || password !== sitePassword) {
+  if (typeof username !== "string" || typeof password !== "string" || !username || !password) {
     return { error: dict.errorIncorrect };
   }
 
-  const token = await computeAccessToken(sessionSecret);
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, username.trim().toLowerCase()))
+    .limit(1);
+
+  if (!user || user.status !== "active" || !(await verifyPassword(password, user.passwordHash))) {
+    return { error: dict.errorIncorrect };
+  }
+
+  const token = await computeSessionToken(sessionSecret, user.id);
   const cookieStore = await cookies();
   cookieStore.set(PRIVATE_COOKIE_NAME, token, {
     httpOnly: true,
     secure: true,
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 30, // 30 days
+    maxAge: SESSION_MAX_AGE_SECONDS,
   });
 
   redirect(`/${locale}/private`);

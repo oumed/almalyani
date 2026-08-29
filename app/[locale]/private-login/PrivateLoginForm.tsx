@@ -10,6 +10,7 @@ type Dict = {
   brand: string;
   privateTitle: string;
   privateSubtitle: string;
+  usernameLabel: string;
   passwordLabel: string;
   enterButton: string;
   checkingButton: string;
@@ -44,12 +45,24 @@ export default function PrivateLoginForm({
         <form action={formAction} className="flex w-full flex-col gap-4">
           <input type="hidden" name="locale" value={locale} />
           <label className="flex flex-col gap-2 text-start text-sm text-muted">
+            {dict.usernameLabel}
+            <input
+              type="text"
+              name="username"
+              required
+              autoFocus
+              autoComplete="username"
+              className="rounded border border-line bg-transparent px-3 py-2 text-foreground outline-none focus:border-accent"
+            />
+          </label>
+
+          <label className="flex flex-col gap-2 text-start text-sm text-muted">
             {dict.passwordLabel}
             <input
               type="password"
               name="password"
               required
-              autoFocus
+              autoComplete="current-password"
               className="rounded border border-line bg-transparent px-3 py-2 text-foreground outline-none focus:border-accent"
             />
           </label>

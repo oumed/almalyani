@@ -87,6 +87,7 @@ type Dictionary = {
   teamLogin: string;
   privateTitle: string;
   privateSubtitle: string;
+  usernameLabel: string;
   passwordLabel: string;
   enterButton: string;
   checkingButton: string;
@@ -230,11 +231,12 @@ export const dictionaries: Record<Locale, Dictionary> = {
     },
     teamLogin: "Team Login",
     privateTitle: "Private Area",
-    privateSubtitle: "Enter the password to continue.",
+    privateSubtitle: "Sign in with your username and password to continue.",
+    usernameLabel: "Username",
     passwordLabel: "Password",
     enterButton: "Enter",
     checkingButton: "Checking…",
-    errorIncorrect: "Incorrect password.",
+    errorIncorrect: "Incorrect username or password.",
     errorNotConfigured: "The private area isn't configured yet.",
     privateYoureIn: "You're in",
     privateBody:
@@ -373,11 +375,12 @@ export const dictionaries: Record<Locale, Dictionary> = {
     },
     teamLogin: "Connexion équipe",
     privateTitle: "Espace privé",
-    privateSubtitle: "Entrez le mot de passe pour continuer.",
+    privateSubtitle: "Connectez-vous avec votre nom d'utilisateur et votre mot de passe.",
+    usernameLabel: "Nom d'utilisateur",
     passwordLabel: "Mot de passe",
     enterButton: "Entrer",
     checkingButton: "Vérification…",
-    errorIncorrect: "Mot de passe incorrect.",
+    errorIncorrect: "Nom d'utilisateur ou mot de passe incorrect.",
     errorNotConfigured: "L'espace privé n'est pas encore configuré.",
     privateYoureIn: "Vous êtes connecté",
     privateBody:
@@ -514,11 +517,12 @@ export const dictionaries: Record<Locale, Dictionary> = {
     },
     teamLogin: "دخول الفريق",
     privateTitle: "المنطقة الخاصة",
-    privateSubtitle: "أدخل كلمة المرور للمتابعة.",
+    privateSubtitle: "سجّل الدخول باسم المستخدم وكلمة المرور للمتابعة.",
+    usernameLabel: "اسم المستخدم",
     passwordLabel: "كلمة المرور",
     enterButton: "دخول",
     checkingButton: "جارٍ التحقق…",
-    errorIncorrect: "كلمة المرور غير صحيحة.",
+    errorIncorrect: "اسم المستخدم أو كلمة المرور غير صحيحة.",
     errorNotConfigured: "المنطقة الخاصة غير مهيأة بعد.",
     privateYoureIn: "لقد دخلت",
     privateBody:

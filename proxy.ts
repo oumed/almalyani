@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { defaultLocale, isLocale, locales } from "@/lib/i18n";
-import { isValidAccessToken, PRIVATE_COOKIE_NAME } from "@/lib/private-auth";
+import { getSessionUserId, PRIVATE_COOKIE_NAME } from "@/lib/private-auth";
 
 function detectLocale(request: NextRequest): string {
   const acceptLanguage = request.headers.get("accept-language");
@@ -34,8 +34,8 @@ export async function proxy(request: NextRequest) {
 
   if (rest === "/private" || rest.startsWith("/private/")) {
     const token = request.cookies.get(PRIVATE_COOKIE_NAME)?.value;
-    const valid = await isValidAccessToken(token, process.env.SESSION_SECRET);
-    if (!valid) {
+    const userId = await getSessionUserId(token, process.env.SESSION_SECRET);
+    if (!userId) {
       const url = request.nextUrl.clone();
       url.pathname = `/${locale}/private-login`;
       return NextResponse.redirect(url);
