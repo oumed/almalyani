@@ -135,6 +135,7 @@ type Dictionary = {
     permits: string;
     financial: string;
     bimSite: string;
+    bimSiteTooltip: string;
   };
   usersAdmin: {
     title: string;
@@ -658,6 +659,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       permits: "Permits",
       financial: "Financial",
       bimSite: "BIM & Site",
+      bimSiteTooltip: "BIM: Building Information Modeling — a 3D digital model of the building",
     },
     usersAdmin: {
       title: "Users",
@@ -1185,6 +1187,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       permits: "Permis",
       financial: "Finances",
       bimSite: "BIM & Chantier",
+      bimSiteTooltip: "BIM : Building Information Modeling — maquette numérique 3D du bâtiment",
     },
     usersAdmin: {
       title: "Utilisateurs",
@@ -1710,6 +1713,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       permits: "الرخص",
       financial: "الشؤون المالية",
       bimSite: "BIM والورش",
+      bimSiteTooltip: "BIM: Building Information Modeling — نموذج رقمي ثلاثي الأبعاد للمبنى",
     },
     usersAdmin: {
       title: "المستخدمون",

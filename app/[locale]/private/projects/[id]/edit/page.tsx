@@ -515,6 +515,7 @@ export default async function EditProjectPage({
     {
       key: "bim-site",
       label: dict.projectTabs.bimSite,
+      tooltip: dict.projectTabs.bimSiteTooltip,
       content: (
         <>
           <BuildingModelsSection locale={locale} dict={dict} projectId={target.id} models={buildingModelsMapped} />

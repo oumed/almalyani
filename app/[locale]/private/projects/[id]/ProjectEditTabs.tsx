@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 export type ProjectTab = {
   key: string;
   label: string;
+  tooltip?: string;
   content: ReactNode;
 };
 
@@ -24,6 +25,7 @@ export function ProjectEditTabs({ tabs }: { tabs: ProjectTab[] }) {
             type="button"
             onClick={() => setActive(tab.key)}
             aria-current={active === tab.key ? "page" : undefined}
+            title={tab.tooltip}
             className={`-mb-px border-b-2 px-3 py-2.5 text-sm font-medium transition-colors ${
               active === tab.key
                 ? "border-accent text-foreground"
