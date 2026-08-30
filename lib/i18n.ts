@@ -167,6 +167,24 @@ type Dictionary = {
     errorGeneric: string;
     errorDuplicate: string;
     errorForbidden: string;
+    allRoles: string;
+    filterLabel: string;
+    exportButton: string;
+    importButton: string;
+  };
+  usersImport: {
+    title: string;
+    instructions: string;
+    columns: string;
+    fileLabel: string;
+    importButton: string;
+    importingButton: string;
+    back: string;
+    resultCreated: string;
+    resultFailed: string;
+    errorNoFile: string;
+    errorEmptyFile: string;
+    errorRow: string;
   };
   manageProjects: string;
   projectsAdmin: {
@@ -691,6 +709,24 @@ export const dictionaries: Record<Locale, Dictionary> = {
       errorGeneric: "Something went wrong. Please check the fields and try again.",
       errorDuplicate: "That username, phone, or CIN is already in use.",
       errorForbidden: "You don't have access to this page.",
+      allRoles: "All roles",
+      filterLabel: "Role",
+      exportButton: "Export",
+      importButton: "Import",
+    },
+    usersImport: {
+      title: "Import Users",
+      instructions: "Upload a CSV file with a header row using these exact column names:",
+      columns: "email, password, firstName, lastName, phone, cin, userType, status",
+      fileLabel: "CSV file",
+      importButton: "Import",
+      importingButton: "Importing…",
+      back: "Back",
+      resultCreated: "created",
+      resultFailed: "failed",
+      errorNoFile: "Choose a CSV file first.",
+      errorEmptyFile: "The file has no data rows.",
+      errorRow: "Row",
     },
     manageProjects: "Manage Projects",
     projectsAdmin: {
@@ -1219,6 +1255,24 @@ export const dictionaries: Record<Locale, Dictionary> = {
       errorGeneric: "Une erreur est survenue. Vérifiez les champs et réessayez.",
       errorDuplicate: "Ce nom d'utilisateur, téléphone ou CIN est déjà utilisé.",
       errorForbidden: "Vous n'avez pas accès à cette page.",
+      allRoles: "Tous les rôles",
+      filterLabel: "Rôle",
+      exportButton: "Exporter",
+      importButton: "Importer",
+    },
+    usersImport: {
+      title: "Importer des utilisateurs",
+      instructions: "Téléversez un fichier CSV avec une ligne d'en-tête utilisant exactement ces noms de colonnes :",
+      columns: "email, password, firstName, lastName, phone, cin, userType, status",
+      fileLabel: "Fichier CSV",
+      importButton: "Importer",
+      importingButton: "Importation…",
+      back: "Retour",
+      resultCreated: "créés",
+      resultFailed: "échoués",
+      errorNoFile: "Choisissez d'abord un fichier CSV.",
+      errorEmptyFile: "Le fichier ne contient aucune ligne de données.",
+      errorRow: "Ligne",
     },
     manageProjects: "Gérer les projets",
     projectsAdmin: {
@@ -1745,6 +1799,24 @@ export const dictionaries: Record<Locale, Dictionary> = {
       errorGeneric: "حدث خطأ ما. تحقق من الحقول وحاول مرة أخرى.",
       errorDuplicate: "اسم المستخدم أو الهاتف أو رقم البطاقة الوطنية مستخدم بالفعل.",
       errorForbidden: "ليس لديك صلاحية الوصول إلى هذه الصفحة.",
+      allRoles: "كل الأدوار",
+      filterLabel: "الدور",
+      exportButton: "تصدير",
+      importButton: "استيراد",
+    },
+    usersImport: {
+      title: "استيراد المستخدمين",
+      instructions: "ارفع ملف CSV يحتوي على سطر عناوين بهذه الأسماء بالضبط:",
+      columns: "email, password, firstName, lastName, phone, cin, userType, status",
+      fileLabel: "ملف CSV",
+      importButton: "استيراد",
+      importingButton: "جارٍ الاستيراد…",
+      back: "رجوع",
+      resultCreated: "تم إنشاؤهم",
+      resultFailed: "فشلوا",
+      errorNoFile: "اختر ملف CSV أولاً.",
+      errorEmptyFile: "الملف لا يحتوي على أي بيانات.",
+      errorRow: "السطر",
     },
     manageProjects: "إدارة المشاريع",
     projectsAdmin: {
