@@ -39,6 +39,7 @@ import { BuildingModelsSection, type BuildingModelRow } from "../BuildingModelsS
 import { ModelComponentsSection, type ModelComponentRow } from "../ModelComponentsSection";
 import { SiteProgressSection, type SiteProgressRow } from "../SiteProgressSection";
 import { DocumentVersionsSection, type DocumentVersionRow } from "../DocumentVersionsSection";
+import { ProjectEditTabs, type ProjectTab } from "../ProjectEditTabs";
 
 export default async function EditProjectPage({
   params,
@@ -384,131 +385,166 @@ export default async function EditProjectPage({
     };
   });
 
+  const tabs: ProjectTab[] = [
+    {
+      key: "overview",
+      label: dict.projectTabs.overview,
+      content: (
+        <>
+          <ProjectForm
+            locale={locale}
+            dict={dict}
+            action={updateProject.bind(null, target.id)}
+            mode="edit"
+            clients={clients.map((c) => ({ id: c.id, label: c.fullName || c.email }))}
+            initialValues={{
+              clientId: target.clientId,
+              status: target.status,
+              title: cold.title ?? "",
+              description: cold.description ?? "",
+              cadastralNumber: cold.cadastral_number ?? "",
+              landSurface: String(cold.land_surface_m2 ?? ""),
+              builtSurface: String(cold.built_surface_m2 ?? ""),
+              budgetMin: String(cold.budget?.min ?? ""),
+              budgetMax: String(cold.budget?.max ?? ""),
+            }}
+          />
+
+          {target.status !== "closed" && (
+            <form action={closeProject.bind(null, target.id, locale)}>
+              <button
+                type="submit"
+                className="rounded border border-accent/50 px-4 py-2 text-xs font-medium text-accent hover:bg-accent/10"
+              >
+                {dict.projectsAdmin.closeButton}
+              </button>
+            </form>
+          )}
+        </>
+      ),
+    },
+    {
+      key: "team-phases",
+      label: dict.projectTabs.teamPhases,
+      content: (
+        <>
+          <TeamSection
+            locale={locale}
+            dict={dict}
+            projectId={target.id}
+            members={teamMembers}
+            users={allUsers.map((u) => ({ id: u.id, label: u.fullName || u.email }))}
+          />
+          <PhasesSection locale={locale} dict={dict} projectId={target.id} phases={phases} />
+        </>
+      ),
+    },
+    {
+      key: "workflow",
+      label: dict.projectTabs.workflow,
+      content: (
+        <>
+          <TasksSection
+            locale={locale}
+            dict={dict}
+            projectId={target.id}
+            tasks={tasks}
+            phases={phases.map((p) => ({ id: p.id, name: p.name }))}
+            users={allUsers.map((u) => ({ id: u.id, label: u.fullName || u.email }))}
+          />
+          <DocumentsSection locale={locale} dict={dict} projectId={target.id} documents={documents} />
+          <ClarificationsSection locale={locale} dict={dict} projectId={target.id} clarifications={clarifications} />
+          <ApprovalsSection locale={locale} dict={dict} projectId={target.id} approvals={approvals} />
+        </>
+      ),
+    },
+    {
+      key: "permits",
+      label: dict.projectTabs.permits,
+      content: (
+        <>
+          <BuildingPermitSection
+            key={JSON.stringify(buildingPermitValues)}
+            locale={locale}
+            dict={dict}
+            projectId={target.id}
+            values={buildingPermitValues}
+          />
+          <OccupancyPermitSection
+            key={JSON.stringify(occupancyPermitValues)}
+            locale={locale}
+            dict={dict}
+            projectId={target.id}
+            values={occupancyPermitValues}
+          />
+        </>
+      ),
+    },
+    {
+      key: "financial",
+      label: dict.projectTabs.financial,
+      content: (
+        <>
+          <ProposalsSection
+            locale={locale}
+            dict={dict}
+            projectId={target.id}
+            proposals={proposals}
+            professionals={professionals.map((p) => ({ id: p.id, label: p.fullName || p.email }))}
+          />
+          <ContractsSection
+            locale={locale}
+            dict={dict}
+            projectId={target.id}
+            contracts={contractRowsMapped}
+            proposals={proposals.map((p) => ({
+              id: p.id,
+              label: `${p.professionalName} — ${p.amount.toLocaleString()} MAD`,
+            }))}
+          />
+          <PaymentsSection
+            locale={locale}
+            dict={dict}
+            projectId={target.id}
+            payments={paymentsMapped}
+            targets={paymentTargets}
+          />
+        </>
+      ),
+    },
+    {
+      key: "bim-site",
+      label: dict.projectTabs.bimSite,
+      content: (
+        <>
+          <BuildingModelsSection locale={locale} dict={dict} projectId={target.id} models={buildingModelsMapped} />
+          <ModelComponentsSection
+            locale={locale}
+            dict={dict}
+            projectId={target.id}
+            components={modelComponents}
+            models={buildingModelsMapped.map((m) => ({ id: m.id, label: m.softwareUsed || m.ifcVersion || m.id }))}
+          />
+          <SiteProgressSection locale={locale} dict={dict} projectId={target.id} logs={siteProgress} />
+          <DocumentVersionsSection
+            locale={locale}
+            dict={dict}
+            projectId={target.id}
+            versions={documentVersionsMapped}
+            documents={documents.map((d) => ({ id: d.id, label: d.title || d.id }))}
+          />
+        </>
+      ),
+    },
+  ];
+
   return (
-    <main className="relative flex flex-1 flex-col items-center px-6 py-16 sm:py-24">
-      <div className="flex w-full max-w-2xl flex-col gap-8">
-        <h1 className="text-sm font-semibold uppercase tracking-[0.2em] text-foreground">
-          {cold.title || dict.projectsAdmin.title}
-        </h1>
+    <main className="flex flex-1 flex-col gap-8 px-6 py-12 sm:px-10">
+      <h1 className="font-[family-name:var(--font-serif)] text-2xl font-medium text-foreground">
+        {cold.title || dict.projectsAdmin.title}
+      </h1>
 
-        <ProjectForm
-          locale={locale}
-          dict={dict}
-          action={updateProject.bind(null, target.id)}
-          mode="edit"
-          clients={clients.map((c) => ({ id: c.id, label: c.fullName || c.email }))}
-          initialValues={{
-            clientId: target.clientId,
-            status: target.status,
-            title: cold.title ?? "",
-            description: cold.description ?? "",
-            cadastralNumber: cold.cadastral_number ?? "",
-            landSurface: String(cold.land_surface_m2 ?? ""),
-            builtSurface: String(cold.built_surface_m2 ?? ""),
-            budgetMin: String(cold.budget?.min ?? ""),
-            budgetMax: String(cold.budget?.max ?? ""),
-          }}
-        />
-
-        {target.status !== "closed" && (
-          <form action={closeProject.bind(null, target.id, locale)} className="border-t border-line pt-6">
-            <button
-              type="submit"
-              className="rounded border border-accent/50 px-4 py-2 text-xs font-medium text-accent hover:bg-accent/10"
-            >
-              {dict.projectsAdmin.closeButton}
-            </button>
-          </form>
-        )}
-
-        <TeamSection
-          locale={locale}
-          dict={dict}
-          projectId={target.id}
-          members={teamMembers}
-          users={allUsers.map((u) => ({ id: u.id, label: u.fullName || u.email }))}
-        />
-
-        <PhasesSection locale={locale} dict={dict} projectId={target.id} phases={phases} />
-
-        <TasksSection
-          locale={locale}
-          dict={dict}
-          projectId={target.id}
-          tasks={tasks}
-          phases={phases.map((p) => ({ id: p.id, name: p.name }))}
-          users={allUsers.map((u) => ({ id: u.id, label: u.fullName || u.email }))}
-        />
-
-        <DocumentsSection locale={locale} dict={dict} projectId={target.id} documents={documents} />
-
-        <ClarificationsSection locale={locale} dict={dict} projectId={target.id} clarifications={clarifications} />
-
-        <ApprovalsSection locale={locale} dict={dict} projectId={target.id} approvals={approvals} />
-
-        <BuildingPermitSection
-          key={JSON.stringify(buildingPermitValues)}
-          locale={locale}
-          dict={dict}
-          projectId={target.id}
-          values={buildingPermitValues}
-        />
-
-        <OccupancyPermitSection
-          key={JSON.stringify(occupancyPermitValues)}
-          locale={locale}
-          dict={dict}
-          projectId={target.id}
-          values={occupancyPermitValues}
-        />
-
-        <ProposalsSection
-          locale={locale}
-          dict={dict}
-          projectId={target.id}
-          proposals={proposals}
-          professionals={professionals.map((p) => ({ id: p.id, label: p.fullName || p.email }))}
-        />
-
-        <ContractsSection
-          locale={locale}
-          dict={dict}
-          projectId={target.id}
-          contracts={contractRowsMapped}
-          proposals={proposals.map((p) => ({
-            id: p.id,
-            label: `${p.professionalName} — ${p.amount.toLocaleString()} MAD`,
-          }))}
-        />
-
-        <PaymentsSection
-          locale={locale}
-          dict={dict}
-          projectId={target.id}
-          payments={paymentsMapped}
-          targets={paymentTargets}
-        />
-
-        <BuildingModelsSection locale={locale} dict={dict} projectId={target.id} models={buildingModelsMapped} />
-
-        <ModelComponentsSection
-          locale={locale}
-          dict={dict}
-          projectId={target.id}
-          components={modelComponents}
-          models={buildingModelsMapped.map((m) => ({ id: m.id, label: m.softwareUsed || m.ifcVersion || m.id }))}
-        />
-
-        <SiteProgressSection locale={locale} dict={dict} projectId={target.id} logs={siteProgress} />
-
-        <DocumentVersionsSection
-          locale={locale}
-          dict={dict}
-          projectId={target.id}
-          versions={documentVersionsMapped}
-          documents={documents.map((d) => ({ id: d.id, label: d.title || d.id }))}
-        />
-      </div>
+      <ProjectEditTabs tabs={tabs} />
     </main>
   );
 }
