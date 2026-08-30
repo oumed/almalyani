@@ -1,13 +1,16 @@
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import { notFound, redirect } from "next/navigation";
 import { db } from "@/db";
 import {
   approvalSubmissions,
   buildingPermits,
   clarificationRequests,
+  contracts,
   occupancyPermits,
+  payments,
   projectDocuments,
   projectPhases,
+  projectProposals,
   projectTasks,
   projectTeamMembers,
   projects,
@@ -25,6 +28,9 @@ import { ClarificationsSection, type ClarificationRow } from "../ClarificationsS
 import { ApprovalsSection, type ApprovalRow } from "../ApprovalsSection";
 import { BuildingPermitSection, type BuildingPermitValues } from "../BuildingPermitSection";
 import { OccupancyPermitSection, type OccupancyPermitValues } from "../OccupancyPermitSection";
+import { ProposalsSection, type ProposalRow } from "../ProposalsSection";
+import { ContractsSection, type ContractRow } from "../ContractsSection";
+import { PaymentsSection, type PaymentRow } from "../PaymentsSection";
 
 export default async function EditProjectPage({
   params,
@@ -108,6 +114,53 @@ export default async function EditProjectPage({
     .from(occupancyPermits)
     .where(eq(occupancyPermits.projectId, target.id))
     .limit(1);
+
+  const professionals = await db
+    .select({ id: users.id, fullName: users.fullName, email: users.email })
+    .from(users)
+    .where(eq(users.userType, "professional"));
+
+  const proposalRows = await db
+    .select({
+      id: projectProposals.id,
+      status: projectProposals.status,
+      attributes: projectProposals.attributes,
+      professionalName: users.fullName,
+      professionalEmail: users.email,
+    })
+    .from(projectProposals)
+    .leftJoin(users, eq(users.id, projectProposals.professionalId))
+    .where(eq(projectProposals.projectId, target.id));
+
+  const contractRows = await db
+    .select({
+      id: contracts.id,
+      status: contracts.status,
+      attributes: contracts.attributes,
+      professionalName: users.fullName,
+      professionalEmail: users.email,
+    })
+    .from(contracts)
+    .leftJoin(users, eq(users.id, contracts.professionalId))
+    .where(eq(contracts.projectId, target.id));
+
+  const paymentRows = await db
+    .select({
+      id: payments.id,
+      status: payments.status,
+      attributes: payments.attributes,
+      contractId: payments.contractId,
+      buildingPermitId: payments.buildingPermitId,
+      contractProfessionalName: users.fullName,
+      contractProfessionalEmail: users.email,
+    })
+    .from(payments)
+    .leftJoin(contracts, eq(contracts.id, payments.contractId))
+    .leftJoin(users, eq(users.id, contracts.professionalId))
+    .leftJoin(buildingPermits, eq(buildingPermits.id, payments.buildingPermitId))
+    .where(
+      or(eq(contracts.projectId, target.id), eq(buildingPermits.projectId, target.id))
+    );
 
   const cold = target.coldAttributes as {
     title?: string;
@@ -202,6 +255,52 @@ export default async function EditProjectPage({
     certificateUrl: occupancyPermitAttrs.compliance_certificate_url ?? "",
   };
 
+  const proposals: ProposalRow[] = proposalRows.map((p) => {
+    const attrs = p.attributes as { amount?: number };
+    return {
+      id: p.id,
+      professionalName: p.professionalName || p.professionalEmail || "—",
+      amount: attrs.amount ?? 0,
+      status: p.status,
+    };
+  });
+
+  const contractRowsMapped: ContractRow[] = contractRows.map((c) => {
+    const attrs = c.attributes as { total_amount?: number };
+    return {
+      id: c.id,
+      professionalName: c.professionalName || c.professionalEmail || "—",
+      totalAmount: attrs.total_amount ?? 0,
+      status: c.status,
+    };
+  });
+
+  const paymentTargetLabel = (row: (typeof paymentRows)[number]) =>
+    row.contractId
+      ? `${dict.paymentsSection.contractOption} — ${row.contractProfessionalName || row.contractProfessionalEmail || "—"}`
+      : dict.paymentsSection.permitOption;
+
+  const paymentsMapped: PaymentRow[] = paymentRows.map((p) => {
+    const attrs = p.attributes as { amount?: number; payment_type?: string };
+    return {
+      id: p.id,
+      targetLabel: paymentTargetLabel(p),
+      amount: attrs.amount ?? 0,
+      paymentType: attrs.payment_type ?? "other",
+      status: p.status,
+    };
+  });
+
+  const paymentTargets = [
+    ...contractRowsMapped.map((c) => ({
+      value: `contract:${c.id}`,
+      label: `${dict.paymentsSection.contractOption} — ${c.professionalName}`,
+    })),
+    ...(buildingPermitRow
+      ? [{ value: `permit:${buildingPermitRow.id}`, label: dict.paymentsSection.permitOption }]
+      : []),
+  ];
+
   return (
     <main className="relative flex flex-1 flex-col items-center px-6 py-16 sm:py-24">
       <div className="flex w-full max-w-2xl flex-col gap-8">
@@ -278,6 +377,33 @@ export default async function EditProjectPage({
           dict={dict}
           projectId={target.id}
           values={occupancyPermitValues}
+        />
+
+        <ProposalsSection
+          locale={locale}
+          dict={dict}
+          projectId={target.id}
+          proposals={proposals}
+          professionals={professionals.map((p) => ({ id: p.id, label: p.fullName || p.email }))}
+        />
+
+        <ContractsSection
+          locale={locale}
+          dict={dict}
+          projectId={target.id}
+          contracts={contractRowsMapped}
+          proposals={proposals.map((p) => ({
+            id: p.id,
+            label: `${p.professionalName} — ${p.amount.toLocaleString()} MAD`,
+          }))}
+        />
+
+        <PaymentsSection
+          locale={locale}
+          dict={dict}
+          projectId={target.id}
+          payments={paymentsMapped}
+          targets={paymentTargets}
         />
       </div>
     </main>

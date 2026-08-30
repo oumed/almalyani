@@ -310,6 +310,68 @@ type Dictionary = {
     savingButton: string;
     errorGeneric: string;
   };
+  proposalsSection: {
+    title: string;
+    tableProfessional: string;
+    tableAmount: string;
+    tableStatus: string;
+    professionalLabel: string;
+    amountLabel: string;
+    textLabel: string;
+    statusLabel: string;
+    statuses: {
+      draft: string;
+      submitted: string;
+      under_review: string;
+      accepted: string;
+      rejected: string;
+      withdrawn: string;
+    };
+    addButton: string;
+    addingButton: string;
+    updateButton: string;
+    empty: string;
+    errorGeneric: string;
+  };
+  contractsSection: {
+    title: string;
+    tableProfessional: string;
+    tableAmount: string;
+    tableStatus: string;
+    proposalLabel: string;
+    amountLabel: string;
+    statusLabel: string;
+    statuses: { draft: string; active: string; completed: string; terminated: string };
+    addButton: string;
+    addingButton: string;
+    updateButton: string;
+    empty: string;
+    noProposals: string;
+    errorGeneric: string;
+  };
+  paymentsSection: {
+    title: string;
+    tableTarget: string;
+    tableAmount: string;
+    tableType: string;
+    tableStatus: string;
+    targetLabel: string;
+    contractOption: string;
+    permitOption: string;
+    amountLabel: string;
+    typeLabel: string;
+    types: { contract_fee: string; tax: string; other: string };
+    methodLabel: string;
+    methods: { bank_transfer: string; cash: string; check: string };
+    statusLabel: string;
+    statuses: { pending: string; completed: string; failed: string; refunded: string };
+    addButton: string;
+    addingButton: string;
+    updateButton: string;
+    empty: string;
+    noTargets: string;
+    errorGeneric: string;
+  };
 };
 
 export const dictionaries: Record<Locale, Dictionary> = {
@@ -676,6 +738,68 @@ export const dictionaries: Record<Locale, Dictionary> = {
       savingButton: "Saving…",
       errorGeneric: "Something went wrong. Please try again.",
     },
+    proposalsSection: {
+      title: "Proposals",
+      tableProfessional: "Professional",
+      tableAmount: "Amount (MAD)",
+      tableStatus: "Status",
+      professionalLabel: "Professional",
+      amountLabel: "Amount (MAD)",
+      textLabel: "Proposal text",
+      statusLabel: "Status",
+      statuses: {
+        draft: "Draft",
+        submitted: "Submitted",
+        under_review: "Under review",
+        accepted: "Accepted",
+        rejected: "Rejected",
+        withdrawn: "Withdrawn",
+      },
+      addButton: "Add",
+      addingButton: "Adding…",
+      updateButton: "Update",
+      empty: "No proposals yet.",
+      errorGeneric: "Something went wrong. Please try again.",
+    },
+    contractsSection: {
+      title: "Contracts",
+      tableProfessional: "Professional",
+      tableAmount: "Total (MAD)",
+      tableStatus: "Status",
+      proposalLabel: "Proposal",
+      amountLabel: "Total amount (MAD)",
+      statusLabel: "Status",
+      statuses: { draft: "Draft", active: "Active", completed: "Completed", terminated: "Terminated" },
+      addButton: "Add",
+      addingButton: "Adding…",
+      updateButton: "Update",
+      empty: "No contracts yet.",
+      noProposals: "Add a proposal first to create a contract.",
+      errorGeneric: "Something went wrong. Please try again.",
+    },
+    paymentsSection: {
+      title: "Payments",
+      tableTarget: "For",
+      tableAmount: "Amount (MAD)",
+      tableType: "Type",
+      tableStatus: "Status",
+      targetLabel: "For",
+      contractOption: "Contract",
+      permitOption: "Building Permit",
+      amountLabel: "Amount (MAD)",
+      typeLabel: "Type",
+      types: { contract_fee: "Contract fee", tax: "Tax", other: "Other" },
+      methodLabel: "Method",
+      methods: { bank_transfer: "Bank transfer", cash: "Cash", check: "Check" },
+      statusLabel: "Status",
+      statuses: { pending: "Pending", completed: "Completed", failed: "Failed", refunded: "Refunded" },
+      addButton: "Add",
+      addingButton: "Adding…",
+      updateButton: "Update",
+      empty: "No payments yet.",
+      noTargets: "Add a contract or building permit first to record a payment.",
+      errorGeneric: "Something went wrong. Please try again.",
+    },
   },
   fr: {
     metaTitle: "Abdelkrim Meliani — Architecte D.P.L.G",
@@ -1040,6 +1164,68 @@ export const dictionaries: Record<Locale, Dictionary> = {
       savingButton: "Enregistrement…",
       errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
     },
+    proposalsSection: {
+      title: "Propositions",
+      tableProfessional: "Professionnel",
+      tableAmount: "Montant (MAD)",
+      tableStatus: "Statut",
+      professionalLabel: "Professionnel",
+      amountLabel: "Montant (MAD)",
+      textLabel: "Texte de la proposition",
+      statusLabel: "Statut",
+      statuses: {
+        draft: "Brouillon",
+        submitted: "Soumise",
+        under_review: "En révision",
+        accepted: "Acceptée",
+        rejected: "Rejetée",
+        withdrawn: "Retirée",
+      },
+      addButton: "Ajouter",
+      addingButton: "Ajout…",
+      updateButton: "Mettre à jour",
+      empty: "Aucune proposition pour le moment.",
+      errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+    },
+    contractsSection: {
+      title: "Contrats",
+      tableProfessional: "Professionnel",
+      tableAmount: "Total (MAD)",
+      tableStatus: "Statut",
+      proposalLabel: "Proposition",
+      amountLabel: "Montant total (MAD)",
+      statusLabel: "Statut",
+      statuses: { draft: "Brouillon", active: "Actif", completed: "Terminé", terminated: "Résilié" },
+      addButton: "Ajouter",
+      addingButton: "Ajout…",
+      updateButton: "Mettre à jour",
+      empty: "Aucun contrat pour le moment.",
+      noProposals: "Ajoutez d'abord une proposition pour créer un contrat.",
+      errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+    },
+    paymentsSection: {
+      title: "Paiements",
+      tableTarget: "Pour",
+      tableAmount: "Montant (MAD)",
+      tableType: "Type",
+      tableStatus: "Statut",
+      targetLabel: "Pour",
+      contractOption: "Contrat",
+      permitOption: "Permis de Construire",
+      amountLabel: "Montant (MAD)",
+      typeLabel: "Type",
+      types: { contract_fee: "Frais de contrat", tax: "Taxe", other: "Autre" },
+      methodLabel: "Méthode",
+      methods: { bank_transfer: "Virement bancaire", cash: "Espèces", check: "Chèque" },
+      statusLabel: "Statut",
+      statuses: { pending: "En attente", completed: "Terminé", failed: "Échoué", refunded: "Remboursé" },
+      addButton: "Ajouter",
+      addingButton: "Ajout…",
+      updateButton: "Mettre à jour",
+      empty: "Aucun paiement pour le moment.",
+      noTargets: "Ajoutez d'abord un contrat ou un permis de construire pour enregistrer un paiement.",
+      errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+    },
   },
   ar: {
     metaTitle: "عبد الكريم مليان — مهندس معماري",
@@ -1400,6 +1586,68 @@ export const dictionaries: Record<Locale, Dictionary> = {
       certificateUrlLabel: "رابط شهادة المطابقة",
       saveButton: "حفظ",
       savingButton: "جارٍ الحفظ…",
+      errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
+    },
+    proposalsSection: {
+      title: "العروض",
+      tableProfessional: "المهني",
+      tableAmount: "المبلغ (درهم)",
+      tableStatus: "الحالة",
+      professionalLabel: "المهني",
+      amountLabel: "المبلغ (درهم)",
+      textLabel: "نص العرض",
+      statusLabel: "الحالة",
+      statuses: {
+        draft: "مسودة",
+        submitted: "مُقدَّم",
+        under_review: "قيد المراجعة",
+        accepted: "مقبول",
+        rejected: "مرفوض",
+        withdrawn: "مسحوب",
+      },
+      addButton: "إضافة",
+      addingButton: "جارٍ الإضافة…",
+      updateButton: "تحديث",
+      empty: "لا توجد عروض بعد.",
+      errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
+    },
+    contractsSection: {
+      title: "العقود",
+      tableProfessional: "المهني",
+      tableAmount: "الإجمالي (درهم)",
+      tableStatus: "الحالة",
+      proposalLabel: "العرض",
+      amountLabel: "المبلغ الإجمالي (درهم)",
+      statusLabel: "الحالة",
+      statuses: { draft: "مسودة", active: "ساري", completed: "منجز", terminated: "مُنهى" },
+      addButton: "إضافة",
+      addingButton: "جارٍ الإضافة…",
+      updateButton: "تحديث",
+      empty: "لا توجد عقود بعد.",
+      noProposals: "أضف عرضاً أولاً لإنشاء عقد.",
+      errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
+    },
+    paymentsSection: {
+      title: "المدفوعات",
+      tableTarget: "من أجل",
+      tableAmount: "المبلغ (درهم)",
+      tableType: "النوع",
+      tableStatus: "الحالة",
+      targetLabel: "من أجل",
+      contractOption: "عقد",
+      permitOption: "رخصة البناء",
+      amountLabel: "المبلغ (درهم)",
+      typeLabel: "النوع",
+      types: { contract_fee: "أتعاب العقد", tax: "ضريبة", other: "أخرى" },
+      methodLabel: "طريقة الدفع",
+      methods: { bank_transfer: "تحويل بنكي", cash: "نقداً", check: "شيك" },
+      statusLabel: "الحالة",
+      statuses: { pending: "قيد الانتظار", completed: "مكتمل", failed: "فاشل", refunded: "مُسترد" },
+      addButton: "إضافة",
+      addingButton: "جارٍ الإضافة…",
+      updateButton: "تحديث",
+      empty: "لا توجد مدفوعات بعد.",
+      noTargets: "أضف عقداً أو رخصة بناء أولاً لتسجيل دفعة.",
       errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
     },
   },
