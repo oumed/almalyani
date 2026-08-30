@@ -102,6 +102,25 @@ type Dictionary = {
     users: string;
     projects: string;
     signedInAs: string;
+    searchPlaceholder: string;
+  };
+  searchSection: {
+    title: string;
+    resultsFor: string;
+    tableType: string;
+    tableMatch: string;
+    tableContext: string;
+    empty: string;
+    emptyQuery: string;
+    types: {
+      user: string;
+      project: string;
+      document: string;
+      task: string;
+      clarification: string;
+      permit: string;
+      proposal: string;
+    };
   };
   dashboardSection: {
     greeting: string;
@@ -606,6 +625,25 @@ export const dictionaries: Record<Locale, Dictionary> = {
       users: "Users",
       projects: "Projects",
       signedInAs: "Signed in as",
+      searchPlaceholder: "Search…",
+    },
+    searchSection: {
+      title: "Search",
+      resultsFor: "Results for",
+      tableType: "Type",
+      tableMatch: "Match",
+      tableContext: "Context",
+      empty: "No results found.",
+      emptyQuery: "Type something to search across users and projects.",
+      types: {
+        user: "User",
+        project: "Project",
+        document: "Document",
+        task: "Task",
+        clarification: "Clarification",
+        permit: "Permit",
+        proposal: "Proposal",
+      },
     },
     dashboardSection: {
       greeting: "Welcome back",
@@ -1114,6 +1152,25 @@ export const dictionaries: Record<Locale, Dictionary> = {
       users: "Utilisateurs",
       projects: "Projets",
       signedInAs: "Connecté en tant que",
+      searchPlaceholder: "Rechercher…",
+    },
+    searchSection: {
+      title: "Recherche",
+      resultsFor: "Résultats pour",
+      tableType: "Type",
+      tableMatch: "Résultat",
+      tableContext: "Contexte",
+      empty: "Aucun résultat trouvé.",
+      emptyQuery: "Tapez quelque chose pour rechercher parmi les utilisateurs et les projets.",
+      types: {
+        user: "Utilisateur",
+        project: "Projet",
+        document: "Document",
+        task: "Tâche",
+        clarification: "Clarification",
+        permit: "Permis",
+        proposal: "Proposition",
+      },
     },
     dashboardSection: {
       greeting: "Bon retour",
@@ -1620,6 +1677,25 @@ export const dictionaries: Record<Locale, Dictionary> = {
       users: "المستخدمون",
       projects: "المشاريع",
       signedInAs: "مسجّل الدخول باسم",
+      searchPlaceholder: "بحث…",
+    },
+    searchSection: {
+      title: "البحث",
+      resultsFor: "نتائج البحث عن",
+      tableType: "النوع",
+      tableMatch: "النتيجة",
+      tableContext: "السياق",
+      empty: "لم يتم العثور على نتائج.",
+      emptyQuery: "اكتب شيئاً للبحث في المستخدمين والمشاريع.",
+      types: {
+        user: "مستخدم",
+        project: "مشروع",
+        document: "مستند",
+        task: "مهمة",
+        clarification: "طلب توضيح",
+        permit: "رخصة",
+        proposal: "عرض",
+      },
     },
     dashboardSection: {
       greeting: "مرحباً بعودتك",

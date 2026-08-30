@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { useSearchParams } from "next/navigation";
 
 export type ProjectTab = {
   key: string;
@@ -9,7 +10,10 @@ export type ProjectTab = {
 };
 
 export function ProjectEditTabs({ tabs }: { tabs: ProjectTab[] }) {
-  const [active, setActive] = useState(tabs[0]?.key);
+  const searchParams = useSearchParams();
+  const requestedTab = searchParams.get("tab");
+  const initial = tabs.some((t) => t.key === requestedTab) ? requestedTab! : tabs[0]?.key;
+  const [active, setActive] = useState(initial);
 
   return (
     <div className="flex w-full flex-col gap-8">
