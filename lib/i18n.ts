@@ -372,6 +372,68 @@ type Dictionary = {
     noTargets: string;
     errorGeneric: string;
   };
+  buildingModelsSection: {
+    title: string;
+    tableSoftware: string;
+    tableIfc: string;
+    tableState: string;
+    softwareLabel: string;
+    ifcVersionLabel: string;
+    fileUrlLabel: string;
+    stateLabel: string;
+    addButton: string;
+    addingButton: string;
+    empty: string;
+    errorGeneric: string;
+  };
+  modelComponentsSection: {
+    title: string;
+    tableModel: string;
+    tableElementType: string;
+    tableMaterial: string;
+    tableVolume: string;
+    modelLabel: string;
+    globalIdLabel: string;
+    elementTypeLabel: string;
+    materialLabel: string;
+    volumeLabel: string;
+    areaLabel: string;
+    addButton: string;
+    addingButton: string;
+    empty: string;
+    noModels: string;
+    errorGeneric: string;
+  };
+  siteProgressSection: {
+    title: string;
+    tableDate: string;
+    tableDescription: string;
+    tableProgress: string;
+    tableWeather: string;
+    descriptionLabel: string;
+    percentLabel: string;
+    weatherLabel: string;
+    workersLabel: string;
+    addButton: string;
+    addingButton: string;
+    empty: string;
+    errorGeneric: string;
+  };
+  documentVersionsSection: {
+    title: string;
+    tableDocument: string;
+    tableVersion: string;
+    tableChange: string;
+    documentLabel: string;
+    versionLabel: string;
+    fileUrlLabel: string;
+    changeLabel: string;
+    addButton: string;
+    addingButton: string;
+    empty: string;
+    noDocuments: string;
+    errorGeneric: string;
+  };
 };
 
 export const dictionaries: Record<Locale, Dictionary> = {
@@ -800,6 +862,68 @@ export const dictionaries: Record<Locale, Dictionary> = {
       noTargets: "Add a contract or building permit first to record a payment.",
       errorGeneric: "Something went wrong. Please try again.",
     },
+    buildingModelsSection: {
+      title: "Building Models",
+      tableSoftware: "Software",
+      tableIfc: "IFC Version",
+      tableState: "State",
+      softwareLabel: "Software used",
+      ifcVersionLabel: "IFC version",
+      fileUrlLabel: "File URL",
+      stateLabel: "Model state",
+      addButton: "Add",
+      addingButton: "Adding…",
+      empty: "No building models yet.",
+      errorGeneric: "Something went wrong. Please try again.",
+    },
+    modelComponentsSection: {
+      title: "Model Components",
+      tableModel: "Model",
+      tableElementType: "Element Type",
+      tableMaterial: "Material",
+      tableVolume: "Volume (m³)",
+      modelLabel: "Building model",
+      globalIdLabel: "Global ID",
+      elementTypeLabel: "Element type",
+      materialLabel: "Material",
+      volumeLabel: "Volume (m³)",
+      areaLabel: "Area (m²)",
+      addButton: "Add",
+      addingButton: "Adding…",
+      empty: "No components yet.",
+      noModels: "Add a building model first to add components.",
+      errorGeneric: "Something went wrong. Please try again.",
+    },
+    siteProgressSection: {
+      title: "Site Progress Log",
+      tableDate: "Date",
+      tableDescription: "Description",
+      tableProgress: "Progress",
+      tableWeather: "Weather",
+      descriptionLabel: "Description",
+      percentLabel: "Percent complete",
+      weatherLabel: "Weather",
+      workersLabel: "Workers on site",
+      addButton: "Add Entry",
+      addingButton: "Adding…",
+      empty: "No progress entries yet.",
+      errorGeneric: "Something went wrong. Please try again.",
+    },
+    documentVersionsSection: {
+      title: "Document Versions",
+      tableDocument: "Document",
+      tableVersion: "Version",
+      tableChange: "Change",
+      documentLabel: "Document",
+      versionLabel: "Version number",
+      fileUrlLabel: "File URL",
+      changeLabel: "Change description",
+      addButton: "Add",
+      addingButton: "Adding…",
+      empty: "No versions yet.",
+      noDocuments: "Add a document first to record a version.",
+      errorGeneric: "Something went wrong. Please try again.",
+    },
   },
   fr: {
     metaTitle: "Abdelkrim Meliani — Architecte D.P.L.G",
@@ -1226,6 +1350,68 @@ export const dictionaries: Record<Locale, Dictionary> = {
       noTargets: "Ajoutez d'abord un contrat ou un permis de construire pour enregistrer un paiement.",
       errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
     },
+    buildingModelsSection: {
+      title: "Maquettes BIM",
+      tableSoftware: "Logiciel",
+      tableIfc: "Version IFC",
+      tableState: "État",
+      softwareLabel: "Logiciel utilisé",
+      ifcVersionLabel: "Version IFC",
+      fileUrlLabel: "URL du fichier",
+      stateLabel: "État de la maquette",
+      addButton: "Ajouter",
+      addingButton: "Ajout…",
+      empty: "Aucune maquette pour le moment.",
+      errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+    },
+    modelComponentsSection: {
+      title: "Composants de la Maquette",
+      tableModel: "Maquette",
+      tableElementType: "Type d'élément",
+      tableMaterial: "Matériau",
+      tableVolume: "Volume (m³)",
+      modelLabel: "Maquette BIM",
+      globalIdLabel: "Identifiant global",
+      elementTypeLabel: "Type d'élément",
+      materialLabel: "Matériau",
+      volumeLabel: "Volume (m³)",
+      areaLabel: "Surface (m²)",
+      addButton: "Ajouter",
+      addingButton: "Ajout…",
+      empty: "Aucun composant pour le moment.",
+      noModels: "Ajoutez d'abord une maquette pour ajouter des composants.",
+      errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+    },
+    siteProgressSection: {
+      title: "Journal de Chantier",
+      tableDate: "Date",
+      tableDescription: "Description",
+      tableProgress: "Avancement",
+      tableWeather: "Météo",
+      descriptionLabel: "Description",
+      percentLabel: "Pourcentage d'avancement",
+      weatherLabel: "Météo",
+      workersLabel: "Ouvriers sur site",
+      addButton: "Ajouter une entrée",
+      addingButton: "Ajout…",
+      empty: "Aucune entrée pour le moment.",
+      errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+    },
+    documentVersionsSection: {
+      title: "Versions des Documents",
+      tableDocument: "Document",
+      tableVersion: "Version",
+      tableChange: "Modification",
+      documentLabel: "Document",
+      versionLabel: "Numéro de version",
+      fileUrlLabel: "URL du fichier",
+      changeLabel: "Description de la modification",
+      addButton: "Ajouter",
+      addingButton: "Ajout…",
+      empty: "Aucune version pour le moment.",
+      noDocuments: "Ajoutez d'abord un document pour enregistrer une version.",
+      errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
+    },
   },
   ar: {
     metaTitle: "عبد الكريم مليان — مهندس معماري",
@@ -1648,6 +1834,68 @@ export const dictionaries: Record<Locale, Dictionary> = {
       updateButton: "تحديث",
       empty: "لا توجد مدفوعات بعد.",
       noTargets: "أضف عقداً أو رخصة بناء أولاً لتسجيل دفعة.",
+      errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
+    },
+    buildingModelsSection: {
+      title: "نماذج BIM",
+      tableSoftware: "البرنامج",
+      tableIfc: "إصدار IFC",
+      tableState: "الحالة",
+      softwareLabel: "البرنامج المستخدم",
+      ifcVersionLabel: "إصدار IFC",
+      fileUrlLabel: "رابط الملف",
+      stateLabel: "حالة النموذج",
+      addButton: "إضافة",
+      addingButton: "جارٍ الإضافة…",
+      empty: "لا توجد نماذج بعد.",
+      errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
+    },
+    modelComponentsSection: {
+      title: "مكونات النموذج",
+      tableModel: "النموذج",
+      tableElementType: "نوع العنصر",
+      tableMaterial: "المادة",
+      tableVolume: "الحجم (م³)",
+      modelLabel: "نموذج BIM",
+      globalIdLabel: "المعرّف العام",
+      elementTypeLabel: "نوع العنصر",
+      materialLabel: "المادة",
+      volumeLabel: "الحجم (م³)",
+      areaLabel: "المساحة (م²)",
+      addButton: "إضافة",
+      addingButton: "جارٍ الإضافة…",
+      empty: "لا توجد مكونات بعد.",
+      noModels: "أضف نموذجاً أولاً لإضافة مكونات.",
+      errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
+    },
+    siteProgressSection: {
+      title: "سجل تقدم الورش",
+      tableDate: "التاريخ",
+      tableDescription: "الوصف",
+      tableProgress: "التقدم",
+      tableWeather: "الطقس",
+      descriptionLabel: "الوصف",
+      percentLabel: "نسبة الإنجاز",
+      weatherLabel: "الطقس",
+      workersLabel: "عدد العمال في الموقع",
+      addButton: "إضافة تسجيل",
+      addingButton: "جارٍ الإضافة…",
+      empty: "لا توجد تسجيلات بعد.",
+      errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
+    },
+    documentVersionsSection: {
+      title: "إصدارات المستندات",
+      tableDocument: "المستند",
+      tableVersion: "الإصدار",
+      tableChange: "التعديل",
+      documentLabel: "المستند",
+      versionLabel: "رقم الإصدار",
+      fileUrlLabel: "رابط الملف",
+      changeLabel: "وصف التعديل",
+      addButton: "إضافة",
+      addingButton: "جارٍ الإضافة…",
+      empty: "لا توجد إصدارات بعد.",
+      noDocuments: "أضف مستنداً أولاً لتسجيل إصدار.",
       errorGeneric: "حدث خطأ ما. حاول مرة أخرى.",
     },
   },

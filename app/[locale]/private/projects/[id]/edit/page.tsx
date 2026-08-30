@@ -3,9 +3,12 @@ import { notFound, redirect } from "next/navigation";
 import { db } from "@/db";
 import {
   approvalSubmissions,
+  buildingModelComponents,
+  buildingModels,
   buildingPermits,
   clarificationRequests,
   contracts,
+  documentVersions,
   occupancyPermits,
   payments,
   projectDocuments,
@@ -14,6 +17,7 @@ import {
   projectTasks,
   projectTeamMembers,
   projects,
+  siteProgressLogs,
   users,
 } from "@/db/schema";
 import { dictionaries, isLocale } from "@/lib/i18n";
@@ -31,6 +35,10 @@ import { OccupancyPermitSection, type OccupancyPermitValues } from "../Occupancy
 import { ProposalsSection, type ProposalRow } from "../ProposalsSection";
 import { ContractsSection, type ContractRow } from "../ContractsSection";
 import { PaymentsSection, type PaymentRow } from "../PaymentsSection";
+import { BuildingModelsSection, type BuildingModelRow } from "../BuildingModelsSection";
+import { ModelComponentsSection, type ModelComponentRow } from "../ModelComponentsSection";
+import { SiteProgressSection, type SiteProgressRow } from "../SiteProgressSection";
+import { DocumentVersionsSection, type DocumentVersionRow } from "../DocumentVersionsSection";
 
 export default async function EditProjectPage({
   params,
@@ -161,6 +169,37 @@ export default async function EditProjectPage({
     .where(
       or(eq(contracts.projectId, target.id), eq(buildingPermits.projectId, target.id))
     );
+
+  const buildingModelRows = await db
+    .select()
+    .from(buildingModels)
+    .where(eq(buildingModels.projectId, target.id));
+
+  const modelComponentRows = await db
+    .select({
+      id: buildingModelComponents.id,
+      attributes: buildingModelComponents.attributes,
+      modelSoftware: buildingModels.attributes,
+    })
+    .from(buildingModelComponents)
+    .innerJoin(buildingModels, eq(buildingModels.id, buildingModelComponents.buildingModelId))
+    .where(eq(buildingModels.projectId, target.id));
+
+  const siteProgressRows = await db
+    .select()
+    .from(siteProgressLogs)
+    .where(eq(siteProgressLogs.projectId, target.id))
+    .orderBy(siteProgressLogs.logDate);
+
+  const documentVersionRows = await db
+    .select({
+      id: documentVersions.id,
+      attributes: documentVersions.attributes,
+      documentAttributes: projectDocuments.attributes,
+    })
+    .from(documentVersions)
+    .innerJoin(projectDocuments, eq(projectDocuments.id, documentVersions.documentId))
+    .where(eq(projectDocuments.projectId, target.id));
 
   const cold = target.coldAttributes as {
     title?: string;
@@ -301,6 +340,50 @@ export default async function EditProjectPage({
       : []),
   ];
 
+  const buildingModelsMapped: BuildingModelRow[] = buildingModelRows.map((m) => {
+    const attrs = m.attributes as { software_used?: string; ifc_version?: string; model_state?: string };
+    return {
+      id: m.id,
+      softwareUsed: attrs.software_used ?? "",
+      ifcVersion: attrs.ifc_version ?? "",
+      modelState: attrs.model_state ?? "WIP",
+    };
+  });
+
+  const modelComponents: ModelComponentRow[] = modelComponentRows.map((c) => {
+    const attrs = c.attributes as { element_type?: string; material?: string; volume?: number };
+    const modelAttrs = c.modelSoftware as { software_used?: string };
+    return {
+      id: c.id,
+      modelLabel: modelAttrs.software_used || "—",
+      elementType: attrs.element_type ?? "",
+      material: attrs.material ?? "",
+      volume: attrs.volume ?? 0,
+    };
+  });
+
+  const siteProgress: SiteProgressRow[] = siteProgressRows.map((l) => {
+    const attrs = l.attributes as { description?: string; percent_complete?: number; weather?: string };
+    return {
+      id: l.id,
+      logDate: l.logDate,
+      description: attrs.description ?? "",
+      percentComplete: attrs.percent_complete ?? 0,
+      weather: attrs.weather ?? "",
+    };
+  });
+
+  const documentVersionsMapped: DocumentVersionRow[] = documentVersionRows.map((v) => {
+    const attrs = v.attributes as { version_number?: string; change_description?: string };
+    const docAttrs = v.documentAttributes as { title?: string };
+    return {
+      id: v.id,
+      documentTitle: docAttrs.title || "—",
+      versionNumber: attrs.version_number ?? "V1",
+      changeDescription: attrs.change_description ?? "",
+    };
+  });
+
   return (
     <main className="relative flex flex-1 flex-col items-center px-6 py-16 sm:py-24">
       <div className="flex w-full max-w-2xl flex-col gap-8">
@@ -404,6 +487,26 @@ export default async function EditProjectPage({
           projectId={target.id}
           payments={paymentsMapped}
           targets={paymentTargets}
+        />
+
+        <BuildingModelsSection locale={locale} dict={dict} projectId={target.id} models={buildingModelsMapped} />
+
+        <ModelComponentsSection
+          locale={locale}
+          dict={dict}
+          projectId={target.id}
+          components={modelComponents}
+          models={buildingModelsMapped.map((m) => ({ id: m.id, label: m.softwareUsed || m.ifcVersion || m.id }))}
+        />
+
+        <SiteProgressSection locale={locale} dict={dict} projectId={target.id} logs={siteProgress} />
+
+        <DocumentVersionsSection
+          locale={locale}
+          dict={dict}
+          projectId={target.id}
+          versions={documentVersionsMapped}
+          documents={documents.map((d) => ({ id: d.id, label: d.title || d.id }))}
         />
       </div>
     </main>
