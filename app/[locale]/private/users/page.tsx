@@ -1,15 +1,21 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { dictionaries, isLocale } from "@/lib/i18n";
 import { getCurrentUser } from "@/lib/session";
 import { StatusBadge, statusTone } from "@/components/private/StatusBadge";
+import { RoleFilter } from "./RoleFilter";
+
+const VALID_ROLES = ["client", "professional", "admin"] as const;
 
 export default async function UsersPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ role?: string }>;
 }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
@@ -21,6 +27,9 @@ export default async function UsersPage({
     redirect(`/${locale}/private`);
   }
 
+  const { role } = await searchParams;
+  const activeRole = VALID_ROLES.includes(role as (typeof VALID_ROLES)[number]) ? role! : "";
+
   const allUsers = await db
     .select({
       id: users.id,
@@ -30,20 +39,36 @@ export default async function UsersPage({
       status: users.status,
     })
     .from(users)
+    .where(activeRole ? eq(users.userType, activeRole) : undefined)
     .orderBy(users.email);
 
   return (
     <main className="flex flex-1 flex-col gap-8 px-6 py-12 sm:px-10">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="font-[family-name:var(--font-serif)] text-2xl font-medium text-foreground">
           {t.title}
         </h1>
-        <Link
-          href={`/${locale}/private/users/new`}
-          className="rounded bg-foreground px-4 py-2 text-xs font-medium text-background hover:bg-accent"
-        >
-          {t.addUser}
-        </Link>
+        <div className="flex flex-wrap items-center gap-3">
+          <RoleFilter locale={locale} role={activeRole} label={t.filterLabel} allLabel={t.allRoles} roles={t.roles} />
+          <a
+            href={`/${locale}/private/users/export${activeRole ? `?role=${activeRole}` : ""}`}
+            className="rounded border border-line px-4 py-2 text-xs font-medium text-foreground hover:bg-line/30"
+          >
+            {t.exportButton}
+          </a>
+          <Link
+            href={`/${locale}/private/users/import`}
+            className="rounded border border-line px-4 py-2 text-xs font-medium text-foreground hover:bg-line/30"
+          >
+            {t.importButton}
+          </Link>
+          <Link
+            href={`/${locale}/private/users/new`}
+            className="rounded bg-foreground px-4 py-2 text-xs font-medium text-background hover:bg-accent"
+          >
+            {t.addUser}
+          </Link>
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded-lg border border-line">
