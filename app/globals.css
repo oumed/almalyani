@@ -6,6 +6,14 @@
   --accent: #b3592f;
   --muted: #6b6259;
   --line: #d9d0c3;
+
+  /* Semantic status tones for the private admin area's badge system. */
+  --success-fg: #4d6640;
+  --success-bg: #e3ead9;
+  --warning-fg: #8f6414;
+  --warning-bg: #f1e3c4;
+  --danger-fg: #8c3730;
+  --danger-bg: #f2ddd8;
 }
 
 @theme inline {
@@ -14,6 +22,12 @@
   --color-accent: var(--accent);
   --color-muted: var(--muted);
   --color-line: var(--line);
+  --color-success-fg: var(--success-fg);
+  --color-success-bg: var(--success-bg);
+  --color-warning-fg: var(--warning-fg);
+  --color-warning-bg: var(--warning-bg);
+  --color-danger-fg: var(--danger-fg);
+  --color-danger-bg: var(--danger-bg);
   --font-serif: var(--font-fraunces);
   --font-sans: var(--font-inter);
 }
@@ -25,6 +39,13 @@
     --accent: #d97a4d;
     --muted: #a89e91;
     --line: #33291f;
+
+    --success-fg: #b4d19a;
+    --success-bg: #2a331f;
+    --warning-fg: #e3bd6b;
+    --warning-bg: #3a2f18;
+    --danger-fg: #e2a49b;
+    --danger-bg: #3a221d;
   }
 }
 

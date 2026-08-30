@@ -48,7 +48,7 @@ export function BuildingPermitSection({
   const [state, formAction, pending] = useActionState(boundAction, initialState);
 
   return (
-    <section className="flex w-full flex-col gap-4 border-t border-line pt-8">
+    <section className="flex w-full flex-col gap-4">
       <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-foreground">{t.title}</h2>
 
       <form action={formAction} className="flex flex-wrap items-end gap-4">

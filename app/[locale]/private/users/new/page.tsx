@@ -19,13 +19,11 @@ export default async function NewUserPage({
   }
 
   return (
-    <main className="relative flex flex-1 flex-col items-center px-6 py-16 sm:py-24">
-      <div className="flex w-full max-w-lg flex-col gap-8">
-        <h1 className="text-sm font-semibold uppercase tracking-[0.2em] text-foreground">
-          {dict.usersAdmin.addUser}
-        </h1>
-        <UserForm locale={locale} dict={dict} action={createUser} mode="create" />
-      </div>
+    <main className="flex flex-1 flex-col gap-8 px-6 py-12 sm:px-10">
+      <h1 className="font-[family-name:var(--font-serif)] text-2xl font-medium text-foreground">
+        {dict.usersAdmin.addUser}
+      </h1>
+      <UserForm locale={locale} dict={dict} action={createUser} mode="create" />
     </main>
   );
 }

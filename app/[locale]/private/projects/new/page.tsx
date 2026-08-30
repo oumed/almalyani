@@ -27,19 +27,17 @@ export default async function NewProjectPage({
     .where(eq(users.userType, "client"));
 
   return (
-    <main className="relative flex flex-1 flex-col items-center px-6 py-16 sm:py-24">
-      <div className="flex w-full max-w-lg flex-col gap-8">
-        <h1 className="text-sm font-semibold uppercase tracking-[0.2em] text-foreground">
-          {dict.projectsAdmin.addProject}
-        </h1>
-        <ProjectForm
-          locale={locale}
-          dict={dict}
-          action={createProject}
-          mode="create"
-          clients={clients.map((c) => ({ id: c.id, label: c.fullName || c.email }))}
-        />
-      </div>
+    <main className="flex flex-1 flex-col gap-8 px-6 py-12 sm:px-10">
+      <h1 className="font-[family-name:var(--font-serif)] text-2xl font-medium text-foreground">
+        {dict.projectsAdmin.addProject}
+      </h1>
+      <ProjectForm
+        locale={locale}
+        dict={dict}
+        action={createProject}
+        mode="create"
+        clients={clients.map((c) => ({ id: c.id, label: c.fullName || c.email }))}
+      />
     </main>
   );
 }

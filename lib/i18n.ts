@@ -97,6 +97,26 @@ type Dictionary = {
   privateBody: string;
   logoutLabel: string;
   manageUsers: string;
+  privateNav: {
+    dashboard: string;
+    users: string;
+    projects: string;
+    signedInAs: string;
+  };
+  dashboardSection: {
+    greeting: string;
+    statUsers: string;
+    statProjects: string;
+    statActiveProjects: string;
+  };
+  projectTabs: {
+    overview: string;
+    teamPhases: string;
+    workflow: string;
+    permits: string;
+    financial: string;
+    bimSite: string;
+  };
   usersAdmin: {
     title: string;
     addUser: string;
@@ -581,6 +601,26 @@ export const dictionaries: Record<Locale, Dictionary> = {
       "The private area is coming soon. This page confirms the gate works — real content lands here in a future phase.",
     logoutLabel: "Log out",
     manageUsers: "Manage Users",
+    privateNav: {
+      dashboard: "Dashboard",
+      users: "Users",
+      projects: "Projects",
+      signedInAs: "Signed in as",
+    },
+    dashboardSection: {
+      greeting: "Welcome back",
+      statUsers: "Users",
+      statProjects: "Projects",
+      statActiveProjects: "Active Projects",
+    },
+    projectTabs: {
+      overview: "Overview",
+      teamPhases: "Team & Phases",
+      workflow: "Workflow",
+      permits: "Permits",
+      financial: "Financial",
+      bimSite: "BIM & Site",
+    },
     usersAdmin: {
       title: "Users",
       addUser: "Add User",
@@ -1069,6 +1109,26 @@ export const dictionaries: Record<Locale, Dictionary> = {
       "L'espace privé arrive bientôt. Cette page confirme que l'accès fonctionne — le contenu réel sera ajouté dans une prochaine phase.",
     logoutLabel: "Se déconnecter",
     manageUsers: "Gérer les utilisateurs",
+    privateNav: {
+      dashboard: "Tableau de bord",
+      users: "Utilisateurs",
+      projects: "Projets",
+      signedInAs: "Connecté en tant que",
+    },
+    dashboardSection: {
+      greeting: "Bon retour",
+      statUsers: "Utilisateurs",
+      statProjects: "Projets",
+      statActiveProjects: "Projets actifs",
+    },
+    projectTabs: {
+      overview: "Aperçu",
+      teamPhases: "Équipe & Phases",
+      workflow: "Flux de travail",
+      permits: "Permis",
+      financial: "Finances",
+      bimSite: "BIM & Chantier",
+    },
     usersAdmin: {
       title: "Utilisateurs",
       addUser: "Ajouter un utilisateur",
@@ -1555,6 +1615,26 @@ export const dictionaries: Record<Locale, Dictionary> = {
       "المنطقة الخاصة قادمة قريبًا. تؤكد هذه الصفحة أن الحماية تعمل — سيتم إضافة المحتوى الحقيقي في مرحلة قادمة.",
     logoutLabel: "تسجيل الخروج",
     manageUsers: "إدارة المستخدمين",
+    privateNav: {
+      dashboard: "لوحة التحكم",
+      users: "المستخدمون",
+      projects: "المشاريع",
+      signedInAs: "مسجّل الدخول باسم",
+    },
+    dashboardSection: {
+      greeting: "مرحباً بعودتك",
+      statUsers: "المستخدمون",
+      statProjects: "المشاريع",
+      statActiveProjects: "المشاريع النشطة",
+    },
+    projectTabs: {
+      overview: "نظرة عامة",
+      teamPhases: "الفريق والمراحل",
+      workflow: "سير العمل",
+      permits: "الرخص",
+      financial: "الشؤون المالية",
+      bimSite: "BIM والورش",
+    },
     usersAdmin: {
       title: "المستخدمون",
       addUser: "إضافة مستخدم",
