@@ -6,11 +6,21 @@ import { getCurrentUser } from "@/lib/session";
 
 const COLUMNS = ["email", "firstName", "lastName", "phone", "cin", "userType", "status"] as const;
 
+// Neutralize CSV formula injection: a field starting with =, +, -, @, tab,
+// or CR is interpreted as a formula by Excel/Google Sheets/LibreOffice when
+// the file is opened. These fields come from user-editable attributes
+// (name, phone, CIN), so prefix with a single quote to force text -- the
+// standard OWASP mitigation.
+function neutralizeFormula(value: string): string {
+  return /^[=+\-@\t\r]/.test(value) ? `'${value}` : value;
+}
+
 function csvEscape(value: string): string {
-  if (/[",\n]/.test(value)) {
-    return `"${value.replace(/"/g, '""')}"`;
+  const safe = neutralizeFormula(value);
+  if (/[",\n]/.test(safe)) {
+    return `"${safe.replace(/"/g, '""')}"`;
   }
-  return value;
+  return safe;
 }
 
 export async function GET(request: NextRequest) {
