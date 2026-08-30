@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { Search } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 import { dictionaries, isLocale } from "@/lib/i18n";
 import { getCurrentUser } from "@/lib/session";
 import { logout } from "../private-login/actions";
 import { BrandMonogram } from "@/components/home/BrandMonogram";
+import { PrivateLocaleSwitcher } from "./PrivateLocaleSwitcher";
 
 export default async function PrivateLayout({
   children,
@@ -43,7 +45,21 @@ export default async function PrivateLayout({
           </span>
         </Link>
 
-        <nav aria-label="Private area" className="flex flex-row gap-1 sm:mt-10 sm:flex-col">
+        {isAdmin && (
+          <form action={`/${locale}/private/search`} className="hidden sm:mt-8 sm:block">
+            <label className="relative flex items-center">
+              <Search className="pointer-events-none absolute start-2.5 h-4 w-4 text-muted" />
+              <input
+                type="search"
+                name="q"
+                placeholder={dict.privateNav.searchPlaceholder}
+                className="w-full rounded border border-line bg-transparent py-1.5 ps-8 pe-2 text-sm text-foreground outline-none focus:border-accent"
+              />
+            </label>
+          </form>
+        )}
+
+        <nav aria-label="Private area" className="flex flex-row gap-1 sm:mt-6 sm:flex-col">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -56,7 +72,10 @@ export default async function PrivateLayout({
         </nav>
 
         <div className="hidden flex-col gap-3 sm:mt-auto sm:flex">
-          <div className="border-t border-line pt-4 text-xs text-muted">
+          <div className="border-t border-line pt-4">
+            <PrivateLocaleSwitcher locale={locale} />
+          </div>
+          <div className="text-xs text-muted">
             <p>{dict.privateNav.signedInAs}</p>
             <p className="truncate font-medium text-foreground" dir="ltr">
               {currentUser.email}
