@@ -1,0 +1,218 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f4f4f4', 'tertiaryColor': '#fff'}}}%%
+erDiagram
+    %% Renamed from the original DeepSeek draft for clarity/consistency --
+    %% see validation-notes.md for the full rationale on every rename.
+    %% ==========================================
+    %% PILLAR 1: IDENTITY (BLUE)
+    %% ==========================================
+    users ||--o{ project_team_members : "assigned_to"
+    users ||--o{ project_proposals : "submits"
+    users ||--o{ clarification_requests : "raises"
+    users ||--o{ site_progress_logs : "writes"
+    users ||--o{ project_documents : "uploads"
+
+    %% ==========================================
+    %% PILLAR 2: PROJECT CORE & WBS (GREEN)
+    %% ==========================================
+    users ||--o{ projects : "owns"
+    projects ||--o{ project_phases : "contains"
+    project_phases ||--o{ project_tasks : "contains"
+    projects ||--o{ project_team_members : "has_team"
+
+    %% ==========================================
+    %% PILLAR 3: MOROCCAN LEGAL & PERMITS (ORANGE)
+    %% ==========================================
+    projects ||--o| building_permits : "1-to-1 (Rokhas)"
+    projects ||--o| occupancy_permits : "1-to-1 (Habiter)"
+    building_permits ||--o{ payments : "pays_taxes"
+
+    %% ==========================================
+    %% PILLAR 4: FINANCE & PROPOSALS (GOLD)
+    %% ==========================================
+    projects ||--o{ project_proposals : "receives"
+    project_proposals ||--o| contracts : "wins"
+    contracts ||--o{ payments : "has_payments"
+
+    %% ==========================================
+    %% PILLAR 5: CDE, BUILDING MODELS & QUALITY (PURPLE)
+    %% ==========================================
+    projects ||--o{ project_documents : "has_versions"
+    project_documents ||--o{ document_versions : "history"
+    projects ||--o{ clarification_requests : "has_clarifications"
+    projects ||--o{ approval_submissions : "has_approvals"
+    projects ||--o{ building_models : "has_3d_data"
+    building_models ||--o{ building_model_components : "contains_objects"
+
+    %% ==========================================
+    %% TABLE DEFINITIONS WITH KEY FIELDS
+    %% ==========================================
+    users {
+        uuid id PK
+        string email "Unique Login"
+        string user_type "client|pro|admin"
+        string status "active|suspended"
+        jsonb attributes "CIN, Name, Phone, Address"
+        string cin "GENERATED (Indexed)"
+        string phone "GENERATED (Indexed)"
+        string full_name "GENERATED (Trigram)"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    projects {
+        uuid id PK
+        uuid client_id FK "Owner"
+        string status "draft|rokhas|construction|closed"
+        geometry geo_location "PostGIS Point"
+        jsonb hot_attributes "Rokhas, is_*_tax_paid, Rejections"
+        jsonb cold_attributes "Budget, Cadastre, building_model_id"
+        string cadastral_generated "GENERATED (Indexed)"
+        decimal budget_min_generated "GENERATED (Indexed)"
+        tsvector search_vector "French + Arabic FTS"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    building_permits {
+        uuid id PK
+        uuid project_id FK "Unique"
+        string status "submitted|rejected|delivered"
+        jsonb attributes "Rokhas_ref, Submission_History[], is_*_tax_paid"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    occupancy_permits {
+        uuid id PK
+        uuid project_id FK "Unique"
+        string status "inspecting|issued|rejected"
+        jsonb attributes "Inspection_Date, Notes, Certificate_URL"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    project_documents {
+        uuid id PK
+        uuid project_id FK
+        uuid uploaded_by_id FK "-> users"
+        string status "WIP|Shared|Published|Archived"
+        jsonb attributes "Title, File_URL, Doc_Type, is_approved_by_client"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    document_versions {
+        uuid id PK
+        uuid document_id FK
+        uuid created_by_id FK "-> users"
+        jsonb attributes "Version, Change_Desc, File_URL"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    site_progress_logs {
+        uuid id PK
+        uuid project_id FK
+        uuid created_by_id FK "-> users"
+        date log_date
+        jsonb attributes "Progress%, Photos[], Weather, Issues"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    clarification_requests {
+        uuid id PK
+        uuid project_id FK
+        uuid raised_by_id FK "-> users"
+        uuid assigned_to_id FK "-> users, nullable"
+        string status "open|answered|closed"
+        jsonb attributes "Question, Response, Priority, Cost_Impact"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    project_proposals {
+        uuid id PK
+        uuid project_id FK
+        uuid professional_id FK
+        string status "submitted|accepted|rejected"
+        jsonb attributes "Amount, Proposal, Duration"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    contracts {
+        uuid id PK
+        uuid proposal_id FK
+        uuid project_id FK
+        string status "active|completed|terminated"
+        jsonb attributes "Total_Amount, Terms, Signed_Date"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    payments {
+        uuid id PK
+        uuid contract_id FK "Nullable"
+        uuid building_permit_id FK "Nullable (for taxes)"
+        string status "pending|completed|refunded"
+        jsonb attributes "Amount, Payment_Type, Receipt_URL"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    building_models {
+        uuid id PK
+        uuid project_id FK
+        uuid uploaded_by_id FK "-> users"
+        jsonb attributes "IFC_Version, Software, Volume, Area"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    building_model_components {
+        uuid id PK
+        uuid building_model_id FK
+        jsonb attributes "Global_ID, Type, Material, Properties"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    project_team_members {
+        uuid id PK
+        uuid project_id FK
+        uuid user_id FK
+        string role "architect|bet|topographer"
+        boolean is_active
+        jsonb attributes "Rate, Assigned_Date"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    project_phases {
+        uuid id PK
+        uuid project_id FK
+        string status "active|completed"
+        jsonb attributes "Name, Progress%"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    project_tasks {
+        uuid id PK
+        uuid phase_id FK
+        uuid assigned_to_id FK "-> users, nullable"
+        string status "todo|in_progress|done"
+        jsonb attributes "Title, Due_Date, Deliverables"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    approval_submissions {
+        uuid id PK
+        uuid project_id FK
+        string status "submitted|approved|rejected"
+        jsonb attributes "Title, Response_Deadline, Revisions[]"
+        timestamptz created_at
+        timestamptz updated_at
+    }

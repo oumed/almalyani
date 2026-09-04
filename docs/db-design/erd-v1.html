@@ -1,0 +1,423 @@
+<meta charset="utf-8">
+<title>Almalyani Schema Map</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #eef1ef;
+    --surface: #ffffff;
+    --surface-hub: #e4ede9;
+    --ink: #16211f;
+    --muted: #57675f;
+    --line: #c6d0c9;
+    --accent: #0f6e5c;
+    --accent-2: #b5542a;
+    --mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1412;
+      --surface: #141e1c;
+      --surface-hub: #17231f;
+      --ink: #e9f1ee;
+      --muted: #93a39d;
+      --line: #2a3733;
+      --accent: #49d3b0;
+      --accent-2: #e08a5a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d1412;
+    --surface: #141e1c;
+    --surface-hub: #17231f;
+    --ink: #e9f1ee;
+    --muted: #93a39d;
+    --line: #2a3733;
+    --accent: #49d3b0;
+    --accent-2: #e08a5a;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.55;
+  }
+
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 10px;
+  }
+
+  h1 {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: clamp(26px, 4vw, 34px);
+    line-height: 1.2;
+    text-wrap: balance;
+    margin: 0 0 16px;
+  }
+
+  .lede {
+    max-width: 62ch;
+    color: var(--muted);
+    font-size: 16px;
+    margin: 0 0 8px;
+  }
+
+  .lede + .lede { margin-top: 12px; }
+
+  .meta {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--muted);
+    margin: 22px 0 40px;
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 22px;
+  }
+  .meta b { color: var(--ink); font-weight: 500; }
+
+  .diagram-shell {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .diagram-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .diagram-scroll svg {
+    display: block;
+    width: 2240px;
+    height: 800px;
+    max-width: none;
+  }
+  .scroll-hint {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    padding: 8px;
+    border-top: 1px solid var(--line);
+  }
+
+  figcaption {
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 14px;
+    max-width: 68ch;
+  }
+
+  .tbl { fill: var(--surface); stroke: var(--line); stroke-width: 1.2; }
+  .hub { fill: var(--surface-hub); stroke: var(--accent); stroke-width: 1.4; }
+  .tbl-title {
+    font-family: var(--mono); font-weight: 600; font-size: 12px; fill: var(--ink);
+  }
+  .hub-title {
+    font-family: var(--mono); font-weight: 600; font-size: 14px; fill: var(--accent);
+    letter-spacing: 0.02em;
+  }
+  .tbl-div { stroke: var(--line); stroke-width: 1; }
+  .tbl-field { font-family: var(--mono); font-size: 10.3px; fill: var(--muted); }
+  .tbl-field.user-link { fill: var(--accent-2); }
+  .group-label {
+    font-family: var(--sans); font-weight: 600; font-size: 11px; fill: var(--muted);
+    letter-spacing: 0.1em; text-transform: uppercase; text-anchor: middle;
+  }
+
+  .arrow-structural { color: var(--accent); stroke: currentColor; stroke-width: 1.6; fill: none; }
+  .arrow-cross { color: var(--accent-2); stroke: currentColor; stroke-width: 1.6; stroke-dasharray: 6 4; fill: none; }
+  .arrow-label {
+    font-family: var(--sans); font-size: 10.5px; font-style: italic; text-anchor: start;
+  }
+  .arrow-label.structural { fill: var(--accent); }
+  .arrow-label.cross { fill: var(--accent-2); }
+
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 20px 28px;
+    margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line);
+    font-size: 13.5px; color: var(--muted);
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .legend-swatch { width: 22px; height: 0; border-top: 2.5px solid var(--accent); }
+  .legend-swatch.cross { border-top-style: dashed; border-top-color: var(--accent-2); }
+  .legend-swatch.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent-2); border: none; }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  footer a { color: var(--accent); }
+</style>
+
+<div class="page">
+  <p class="eyebrow">Almalyani &mdash; Schema Reference</p>
+  <h1>How the 17 tables actually connect</h1>
+  <p class="lede">
+    Every foreign-key relationship in the DeepSeek-drafted schema (validated
+    against a real Postgres 17 instance and our own Neon project, then
+    renamed for clarity against international naming conventions &mdash; see
+    <code>docs/db-design/validation-notes.md</code>), drawn with
+    <code>projects</code> as the structural spine and <code>users</code> as
+    the actor every other table eventually reports to.
+  </p>
+  <p class="lede">
+    Two conventions keep 30 relationships legible instead of tangled: the
+    <strong style="color:var(--accent)">teal arrows</strong> are the
+    structural hierarchy (what contains what); relationships back to
+    <code>users</code> &mdash; there are eleven of them, and nearly every
+    table has one &mdash; are written inline inside each box in
+    <strong style="color:var(--accent-2)">rust</strong> instead of drawn as
+    eleven more lines crossing the whole diagram.
+  </p>
+
+  <div class="meta">
+    <span><b>Tables:</b> 17</span>
+    <span><b>Structural FKs:</b> 15</span>
+    <span><b>User-actor FKs:</b> 11</span>
+    <span><b>Not shown:</b> partitioning (dropped &mdash; see validation notes)</span>
+  </div>
+
+  <figure>
+    <div class="diagram-shell">
+      <div class="diagram-scroll">
+<svg viewBox="0 0 2240 800" role="img" aria-label="Entity-relationship diagram of the Almalyani schema. The projects table sits below users as the central hub, with ten vertical arrows fanning out to seven column groups: Team, Work Breakdown, Legal and Permits, Finance, Documents, Quality, and 3D Models. Within columns, chained tables link with additional arrows. A dashed cross-link runs from building_permits to payments, labeled pays_taxes. Tables with a direct relationship to users show it as an inline rust-colored annotation rather than a separate line.">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <!-- ===================== HUBS ===================== -->
+  <rect class="hub" x="20" y="20" width="2180" height="90" rx="8"/>
+  <text class="hub-title" x="38" y="42">users</text>
+  <text class="tbl-field" x="38" y="60">id PK &middot; email (unique) &middot; password_hash</text>
+  <text class="tbl-field" x="38" y="74">user_type: client | professional | admin</text>
+  <text class="tbl-field" x="38" y="88">generated: cin &middot; phone &middot; full_name &middot; city &mdash; all indexed</text>
+
+  <rect class="hub" x="20" y="130" width="2180" height="90" rx="8"/>
+  <text class="hub-title" x="38" y="152">projects</text>
+  <text class="tbl-field" x="38" y="170">id PK &middot; geo_location (PostGIS point)</text>
+  <text class="tbl-field" x="38" y="184">status: draft &rarr; sketching &rarr; rokhas_submitted &#8644; rejected &rarr; taxes_pending &rarr; permit_issued &rarr; construction &rarr; occupancy_pending &rarr; closed</text>
+  <text class="tbl-field" x="38" y="198">hot_attributes (rokhas ref, taxes, rejections) &middot; cold_attributes (budget, cadastre) &mdash; both jsonb</text>
+
+  <line class="arrow-structural" x1="1110" y1="110" x2="1110" y2="130" marker-end="url(#arrow)"/>
+  <text class="arrow-label structural" x="1150" y="123" text-anchor="start">owns (client_id)</text>
+
+  <!-- ===================== PROJECTS -> COLUMN ARROWS (label near the arrow's top) ===================== -->
+  <line class="arrow-structural" x1="120" y1="220" x2="120" y2="280" marker-end="url(#arrow)"/>
+  <line class="arrow-structural" x1="340" y1="220" x2="340" y2="280" marker-end="url(#arrow)"/>
+  <line class="arrow-structural" x1="560" y1="220" x2="560" y2="280" marker-end="url(#arrow)"/>
+  <line class="arrow-structural" x1="780" y1="220" x2="780" y2="280" marker-end="url(#arrow)"/>
+  <line class="arrow-structural" x1="1000" y1="220" x2="1000" y2="280" marker-end="url(#arrow)"/>
+  <line class="arrow-structural" x1="1220" y1="220" x2="1220" y2="280" marker-end="url(#arrow)"/>
+  <line class="arrow-structural" x1="1440" y1="220" x2="1440" y2="280" marker-end="url(#arrow)"/>
+  <line class="arrow-structural" x1="1660" y1="220" x2="1660" y2="280" marker-end="url(#arrow)"/>
+  <line class="arrow-structural" x1="1880" y1="220" x2="1880" y2="280" marker-end="url(#arrow)"/>
+  <line class="arrow-structural" x1="2100" y1="220" x2="2100" y2="280" marker-end="url(#arrow)"/>
+
+  <text class="arrow-label structural" x="126" y="234">has_team</text>
+  <text class="arrow-label structural" x="346" y="234">contains</text>
+  <text class="arrow-label structural" x="566" y="234">1:1 rokhas</text>
+  <text class="arrow-label structural" x="786" y="234">1:1 habiter</text>
+  <text class="arrow-label structural" x="1006" y="234">receives</text>
+  <text class="arrow-label structural" x="1226" y="234">has_versions</text>
+  <text class="arrow-label structural" x="1446" y="234">clarifications</text>
+  <text class="arrow-label structural" x="1666" y="234">approvals</text>
+  <text class="arrow-label structural" x="1886" y="234">site log</text>
+  <text class="arrow-label structural" x="2106" y="234">has_3d_data</text>
+
+  <!-- ===================== GROUP LABELS (own row, clear of arrow labels above and boxes below) ===================== -->
+  <text class="group-label" x="120" y="266">Team</text>
+  <text class="group-label" x="340" y="266">Work Breakdown</text>
+  <text class="group-label" x="670" y="266">Legal &amp; Permits</text>
+  <text class="group-label" x="1000" y="266">Finance</text>
+  <text class="group-label" x="1220" y="266">Documents</text>
+  <text class="group-label" x="1660" y="266">Quality</text>
+  <text class="group-label" x="2100" y="266">3D Models</text>
+
+  <!-- ===================== ROW 1 TABLES (y=280) ===================== -->
+  <!-- project_team_members (was: project_team) -->
+  <rect class="tbl" x="20" y="280" width="200" height="90" rx="6"/>
+  <text class="tbl-title" x="30" y="300">project_team_members</text>
+  <line class="tbl-div" x1="30" y1="308" x2="210" y2="308"/>
+  <text class="tbl-field" x="30" y="322">id PK &middot; role (architect, bet&hellip;)</text>
+  <text class="tbl-field user-link" x="30" y="336">user_id &rarr; users (assigned_to)</text>
+
+  <!-- project_phases -->
+  <rect class="tbl" x="240" y="280" width="200" height="90" rx="6"/>
+  <text class="tbl-title" x="250" y="300">project_phases</text>
+  <line class="tbl-div" x1="250" y1="308" x2="430" y2="308"/>
+  <text class="tbl-field" x="250" y="322">id PK &middot; status</text>
+  <text class="tbl-field" x="250" y="336">attributes: name, progress %</text>
+
+  <!-- building_permits -->
+  <rect class="tbl" x="460" y="280" width="200" height="90" rx="6"/>
+  <text class="tbl-title" x="470" y="300">building_permits</text>
+  <line class="tbl-div" x1="470" y1="308" x2="650" y2="308"/>
+  <text class="tbl-field" x="470" y="322">id PK (unique per project)</text>
+  <text class="tbl-field" x="470" y="336">rokhas_ref, submission history,</text>
+  <text class="tbl-field" x="470" y="350">3 is_*_tax_paid + total_tax_amount</text>
+
+  <!-- occupancy_permits -->
+  <rect class="tbl" x="680" y="280" width="200" height="90" rx="6"/>
+  <text class="tbl-title" x="690" y="300">occupancy_permits</text>
+  <line class="tbl-div" x1="690" y1="308" x2="870" y2="308"/>
+  <text class="tbl-field" x="690" y="322">id PK (unique per project)</text>
+  <text class="tbl-field" x="690" y="336">inspection_date, notes,</text>
+  <text class="tbl-field" x="690" y="350">compliance_certificate_url</text>
+
+  <!-- project_proposals (was: bids) -->
+  <rect class="tbl" x="900" y="280" width="200" height="90" rx="6"/>
+  <text class="tbl-title" x="910" y="300">project_proposals</text>
+  <line class="tbl-div" x1="910" y1="308" x2="1090" y2="308"/>
+  <text class="tbl-field" x="910" y="322">id PK &middot; amount, duration</text>
+  <text class="tbl-field user-link" x="910" y="336">professional_id &rarr; users (submits)</text>
+
+  <!-- project_documents (was: documents) -->
+  <rect class="tbl" x="1120" y="280" width="200" height="90" rx="6"/>
+  <text class="tbl-title" x="1130" y="300">project_documents</text>
+  <line class="tbl-div" x1="1130" y1="308" x2="1310" y2="308"/>
+  <text class="tbl-field" x="1130" y="322">id PK &middot; status (ISO 19650)</text>
+  <text class="tbl-field user-link" x="1130" y="336">uploaded_by_id &rarr; users (uploads)</text>
+  <text class="tbl-field" x="1130" y="350">phase_id &rarr; project_phases (opt.)</text>
+
+  <!-- clarification_requests (was: rfis) -->
+  <rect class="tbl" x="1340" y="280" width="200" height="90" rx="6"/>
+  <text class="tbl-title" x="1350" y="300">clarification_requests</text>
+  <line class="tbl-div" x1="1350" y1="308" x2="1530" y2="308"/>
+  <text class="tbl-field" x="1350" y="322">id PK &middot; priority, cost/schedule impact</text>
+  <text class="tbl-field user-link" x="1350" y="336">raised_by_id / assigned_to_id &rarr; users</text>
+
+  <!-- approval_submissions (was: submittals) -->
+  <rect class="tbl" x="1560" y="280" width="200" height="90" rx="6"/>
+  <text class="tbl-title" x="1570" y="300">approval_submissions</text>
+  <line class="tbl-div" x1="1570" y1="308" x2="1750" y2="308"/>
+  <text class="tbl-field" x="1570" y="322">id PK &middot; status</text>
+  <text class="tbl-field" x="1570" y="336">response_deadline, revisions[]</text>
+
+  <!-- site_progress_logs (was: construction_logs) -->
+  <rect class="tbl" x="1780" y="280" width="200" height="90" rx="6"/>
+  <text class="tbl-title" x="1790" y="300">site_progress_logs</text>
+  <line class="tbl-div" x1="1790" y1="308" x2="1970" y2="308"/>
+  <text class="tbl-field" x="1790" y="322">id PK &middot; log_date &middot; percent_complete</text>
+  <text class="tbl-field user-link" x="1790" y="336">created_by_id &rarr; users (writes)</text>
+
+  <!-- building_models (was: bim_models) -->
+  <rect class="tbl" x="2000" y="280" width="200" height="90" rx="6"/>
+  <text class="tbl-title" x="2010" y="300">building_models</text>
+  <line class="tbl-div" x1="2010" y1="308" x2="2190" y2="308"/>
+  <text class="tbl-field" x="2010" y="322">id PK &middot; ifc_version, total_volume</text>
+  <text class="tbl-field user-link" x="2010" y="336">uploaded_by_id &rarr; users (uploads)</text>
+
+  <!-- ===================== ROW 2 TABLES + CHAIN ARROWS (y=400) ===================== -->
+  <line class="arrow-structural" x1="340" y1="370" x2="340" y2="400" marker-end="url(#arrow)"/>
+  <text class="arrow-label structural" x="346" y="390">contains</text>
+  <rect class="tbl" x="240" y="400" width="200" height="90" rx="6"/>
+  <text class="tbl-title" x="250" y="420">project_tasks</text>
+  <line class="tbl-div" x1="250" y1="428" x2="430" y2="428"/>
+  <text class="tbl-field" x="250" y="442">id PK &middot; status: todo&hellip;done</text>
+  <text class="tbl-field user-link" x="250" y="456">assigned_to_id &rarr; users (assigned_to)</text>
+
+  <line class="arrow-structural" x1="1000" y1="370" x2="1000" y2="400" marker-end="url(#arrow)"/>
+  <text class="arrow-label structural" x="1006" y="390">wins</text>
+  <rect class="tbl" x="900" y="400" width="200" height="90" rx="6"/>
+  <text class="tbl-title" x="910" y="420">contracts</text>
+  <line class="tbl-div" x1="910" y1="428" x2="1090" y2="428"/>
+  <text class="tbl-field" x="910" y="442">id PK &middot; total_amount, signed_date</text>
+  <text class="tbl-field user-link" x="910" y="456">client_id / professional_id &rarr; users</text>
+  <text class="tbl-field" x="910" y="470">project_id &rarr; projects (denormalized)</text>
+
+  <line class="arrow-structural" x1="1220" y1="370" x2="1220" y2="400" marker-end="url(#arrow)"/>
+  <text class="arrow-label structural" x="1226" y="390">history</text>
+  <rect class="tbl" x="1120" y="400" width="200" height="90" rx="6"/>
+  <text class="tbl-title" x="1130" y="420">document_versions</text>
+  <line class="tbl-div" x1="1130" y1="428" x2="1310" y2="428"/>
+  <text class="tbl-field" x="1130" y="442">id PK &middot; version_number</text>
+  <text class="tbl-field user-link" x="1130" y="456">created_by_id &rarr; users (writes)</text>
+
+  <line class="arrow-structural" x1="2100" y1="370" x2="2100" y2="400" marker-end="url(#arrow)"/>
+  <text class="arrow-label structural" x="2106" y="390">contains_objects</text>
+  <rect class="tbl" x="2000" y="400" width="200" height="90" rx="6"/>
+  <text class="tbl-title" x="2010" y="420">building_model_components</text>
+  <line class="tbl-div" x1="2010" y1="428" x2="2190" y2="428"/>
+  <text class="tbl-field" x="2010" y="442">id PK &middot; element_type, material</text>
+  <text class="tbl-field" x="2010" y="456">volume, area, geo_json_footprint</text>
+
+  <!-- ===================== ROW 3: payments + cross-link (y=520) ===================== -->
+  <line class="arrow-structural" x1="1000" y1="490" x2="1000" y2="520" marker-end="url(#arrow)"/>
+  <text class="arrow-label structural" x="1006" y="510">has_payments</text>
+  <rect class="tbl" x="900" y="520" width="200" height="90" rx="6"/>
+  <text class="tbl-title" x="910" y="540">payments</text>
+  <line class="tbl-div" x1="910" y1="548" x2="1090" y2="548"/>
+  <text class="tbl-field" x="910" y="562">id PK &middot; status: pending&hellip;refunded</text>
+  <text class="tbl-field" x="910" y="576">contract_id OR building_permit_id</text>
+  <text class="tbl-field" x="910" y="590">(exactly one, enforced by CHECK)</text>
+
+  <!-- cross link: building_permits -> payments -->
+  <path class="arrow-cross" d="M 560,370 L 560,450 L 880,450 L 880,565 L 900,565" marker-end="url(#arrow)"/>
+  <text class="arrow-label cross" x="590" y="443">pays_taxes</text>
+
+  <!-- ===================== LEGEND ===================== -->
+  <g transform="translate(20,730)">
+    <line x1="0" y1="0" x2="30" y2="0" class="arrow-structural"/>
+    <text class="tbl-field" x="38" y="4">structural hierarchy (projects / parent table)</text>
+
+    <line x1="420" y1="0" x2="450" y2="0" class="arrow-cross"/>
+    <text class="tbl-field" x="458" y="4">cross-link between sibling branches</text>
+
+    <circle cx="850" cy="-2" r="4" fill="var(--accent-2)"/>
+    <text class="tbl-field" x="862" y="4">rust text inside a box = relationship to <tspan font-weight="600" fill="var(--ink)">users</tspan>, not a drawn line</text>
+  </g>
+</svg>
+      </div>
+      <p class="scroll-hint">&harr; scroll horizontally &mdash; 17 tables, drawn at full size for legibility</p>
+    </div>
+    <figcaption>
+      <code>projects</code> fans out into seven functional groups (Team, Work
+      Breakdown, Legal &amp; Permits, Finance, Documents, Quality, 3D
+      Models). Two chains run three tables deep
+      (<code>project_proposals &rarr; contracts &rarr; payments</code> and
+      <code>project_phases &rarr; project_tasks</code>); one cross-link
+      escapes the hierarchy entirely &mdash; <code>building_permits</code>
+      feeds <code>payments</code> directly, since permit taxes are paid
+      through the same table as contract fees.
+    </figcaption>
+  </figure>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-swatch"></span> Structural FK (drawn arrow)</div>
+    <div class="legend-item"><span class="legend-swatch cross"></span> Cross-branch FK (drawn arrow)</div>
+    <div class="legend-item"><span class="legend-swatch dot"></span> FK to <code>users</code> (inline annotation only)</div>
+  </div>
+
+  <footer>
+    Source schema: <code>docs/db-design/schema-v1.sql</code> &middot;
+    Validation: <code>docs/db-design/validation-notes.md</code> &middot;
+    Reference material for a future feature phase &mdash; not yet applied to
+    the live Neon database.
+  </footer>
+</div>
